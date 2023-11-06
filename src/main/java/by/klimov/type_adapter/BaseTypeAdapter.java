@@ -1,4 +1,4 @@
-package by.klimov.type_adapter.factory;
+package by.klimov.type_adapter;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;
