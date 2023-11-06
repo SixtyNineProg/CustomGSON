@@ -4,11 +4,8 @@ import by.klimov.type_adapter.BaseTypeAdapter;
 import by.klimov.type_adapter.BooleanTypeAdapter;
 import by.klimov.type_adapter.DateTypeAdapter;
 import by.klimov.type_adapter.DoubleTypeAdapter;
-import by.klimov.type_adapter.IntegerTypeAdapter;
 import by.klimov.type_adapter.LocalDateTimeTypeAdapter;
 import by.klimov.type_adapter.StringTypeAdapter;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,21 +20,20 @@ public class DefaultTypeAdapterFactory implements TypeAdapterFactory {
         Arrays.asList(
             new BooleanTypeAdapter(),
             new DateTypeAdapter(),
-            new DoubleTypeAdapter(),
-            new IntegerTypeAdapter(),
             new LocalDateTimeTypeAdapter(),
+            new DoubleTypeAdapter(),
             new StringTypeAdapter()));
   }
 
-  public DefaultTypeAdapterFactory(List<BaseTypeAdapter> adapters) {
-    this();
-    this.typeAdapters.addAll(0, adapters);
+  @Override
+  public <T> BaseTypeAdapter getTypeAdapter(T object) {
+    return typeAdapters.stream()
+        .filter(typeAdapter -> isAssignableFrom(object))
+        .findFirst()
+        .orElseThrow();
   }
 
-  @Override
-  public BaseTypeAdapter getTypeAdapter(Type type) {
-    return typeAdapters.stream()
-        .filter(typeAdapter -> typeAdapter.isAssignableFrom(type))
-        .findFirst().orElseThrow();
+  private <T> boolean isAssignableFrom(T object) {
+    return typeAdapters.stream().anyMatch(type -> type.isAssignable(object));
   }
 }

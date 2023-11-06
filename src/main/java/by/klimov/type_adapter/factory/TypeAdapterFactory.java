@@ -6,5 +6,5 @@ import java.lang.reflect.Type;
 
 public interface TypeAdapterFactory {
 
-  BaseTypeAdapter getTypeAdapter(Type type);
+  <T> BaseTypeAdapter getTypeAdapter(T object);
 }

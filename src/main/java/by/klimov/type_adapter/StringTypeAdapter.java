@@ -1,13 +1,21 @@
 package by.klimov.type_adapter;
 
-public class StringTypeAdapter extends BaseTypeAdapter{
-    @Override
-    public <T> T mapJsonToObject(String json, Class<T> tClass) {
-        return null;
-    }
+import org.apache.commons.text.StringEscapeUtils;
 
-    @Override
-    public <T> String mapObjectToJson(T object) {
-        return null;
-    }
+public class StringTypeAdapter implements BaseTypeAdapter {
+
+  @Override
+  public <T> boolean isAssignable(T object) {
+    return object instanceof String;
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
+    return null;
+  }
+
+  @Override
+  public <T> String mapObjectToStringJson(T object) {
+    return "\"" + object + "\"";
+  }
 }

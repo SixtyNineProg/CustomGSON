@@ -18,8 +18,10 @@ public class ProductTestData {
 
   @Builder.Default private Double price = 10000.0;
 
+  @Builder.Default private Boolean isEnable = true;
+
   public Product buildProduct() {
-    return Product.builder().id(uuid).name(name).price(price).build();
+    return Product.builder().id(uuid).name(name).price(price).isEnable(isEnable).build();
   }
 
   public List<Product> buildProducts() {
