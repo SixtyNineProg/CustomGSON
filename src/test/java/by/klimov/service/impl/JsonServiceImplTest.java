@@ -120,22 +120,4 @@ class JsonServiceImplTest {
     // Then
     assertThat(actual).isEqualTo(expected);
   }
-
-  @Test
-  void mapJsonToObjects_when_then() {
-    // Given
-
-    // When
-
-    // Then
-  }
-
-  @Test
-  void mapObjectsToJson_when_then() {
-    // Given
-
-    // When
-
-    // Then
-  }
 }
