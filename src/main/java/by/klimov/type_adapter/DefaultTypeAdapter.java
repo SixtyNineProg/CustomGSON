@@ -1,5 +1,11 @@
 package by.klimov.type_adapter;
 
+import static by.klimov.util.StringLiteral.COLON;
+import static by.klimov.util.StringLiteral.COMMA;
+import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
+import static by.klimov.util.StringLiteral.LEFT_BRACE;
+import static by.klimov.util.StringLiteral.RIGHT_BRACE;
+
 import by.klimov.type_adapter.factory.TypeAdapterFactory;
 import by.klimov.type_adapter.factory.TypeAdapterFactoryImpl;
 import java.lang.reflect.Field;
@@ -9,7 +15,6 @@ import java.util.List;
 import org.apache.commons.lang3.SerializationException;
 
 public class DefaultTypeAdapter implements BaseTypeAdapter {
-
   private final TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
 
   @Override
@@ -25,22 +30,23 @@ public class DefaultTypeAdapter implements BaseTypeAdapter {
   @SuppressWarnings("java:S3011")
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
-    StringBuilder sb = new StringBuilder("{");
+    StringBuilder sb = new StringBuilder(LEFT_BRACE);
     List<Field> fields = Arrays.stream(object.getClass().getDeclaredFields()).toList();
     for (Iterator<Field> iterator = fields.iterator(); iterator.hasNext(); ) {
       Field field = iterator.next();
       field.setAccessible(true);
       Object fieldObject = getFieldObject(object, field);
       BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(fieldObject);
-      sb.append("\"")
+      sb.append(DOUBLE_QUOTE)
           .append(field.getName())
-          .append("\":")
+          .append(DOUBLE_QUOTE)
+          .append(COLON)
           .append(baseTypeAdapter.mapObjectToStringJson(fieldObject));
       if (iterator.hasNext()) {
-        sb.append(",");
+        sb.append(COMMA);
       }
     }
-    sb.append("}");
+    sb.append(RIGHT_BRACE);
     return sb;
   }
 
