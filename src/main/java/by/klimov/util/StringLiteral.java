@@ -11,4 +11,6 @@ public class StringLiteral {
   public static final String COMMA = ",";
   public static final String LEFT_BRACE = "{";
   public static final String RIGHT_BRACE = "}";
+  public static final String LEFT_BRACKET = "[";
+  public static final String RIGHT_BRACKET = "]";
 }

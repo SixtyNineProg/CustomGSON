@@ -4,6 +4,7 @@ import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
 import by.klimov.json_type_adapter.DefaultTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
+import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
 import by.klimov.json_type_adapter.NullTypeAdapter;
 import by.klimov.json_type_adapter.StringTypeAdapter;
@@ -25,7 +26,8 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
             new DoubleTypeAdapter(),
             new UuidTypeAdapter(),
             new StringTypeAdapter(),
-            new LocalDateTypeAdapter()));
+            new LocalDateTypeAdapter(),
+            new ListTypeAdapter()));
   }
 
   @Override
