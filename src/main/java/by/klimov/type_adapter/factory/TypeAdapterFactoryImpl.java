@@ -5,6 +5,7 @@ import by.klimov.type_adapter.BooleanTypeAdapter;
 import by.klimov.type_adapter.DefaultTypeAdapter;
 import by.klimov.type_adapter.DoubleTypeAdapter;
 import by.klimov.type_adapter.NullTypeAdapter;
+import by.klimov.type_adapter.StringTypeAdapter;
 import by.klimov.type_adapter.UuidTypeAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,11 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
   public TypeAdapterFactoryImpl() {
     this.typeAdapters = new ArrayList<>();
     typeAdapters.addAll(
-        Arrays.asList(new BooleanTypeAdapter(), new DoubleTypeAdapter(), new UuidTypeAdapter()));
+        Arrays.asList(
+            new BooleanTypeAdapter(),
+            new DoubleTypeAdapter(),
+            new UuidTypeAdapter(),
+            new StringTypeAdapter()));
   }
 
   @Override
