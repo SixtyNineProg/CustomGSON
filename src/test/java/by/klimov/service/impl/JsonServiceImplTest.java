@@ -100,8 +100,6 @@ class JsonServiceImplTest {
     // When
     String actual = jsonService.mapObjectToJson(uuid);
 
-    boolean b = uuid instanceof UUID;
-
     // Then
     assertThat(actual).isEqualTo(expected);
   }

@@ -18,23 +18,18 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
   public TypeAdapterFactoryImpl() {
     this.typeAdapters = new ArrayList<>();
     typeAdapters.addAll(
-        Arrays.asList(
-//            new BooleanTypeAdapter(),
-//            new DoubleTypeAdapter(),
-            new UuidTypeAdapter()));
+        Arrays.asList(new BooleanTypeAdapter(), new DoubleTypeAdapter(), new UuidTypeAdapter()));
   }
 
   @Override
   public <T> BaseTypeAdapter getTypeAdapter(T object) {
-    return Objects.isNull(object)
-        ? new NullTypeAdapter()
-        : typeAdapters.stream()
-            .filter(typeAdapter -> isAssignableFrom(object))
-            .findFirst()
-            .orElse(new DefaultTypeAdapter());
+    return Objects.isNull(object) ? new NullTypeAdapter() : getBaseTypeAdapter(object);
   }
 
-  private <T> boolean isAssignableFrom(T object) {
-    return typeAdapters.stream().anyMatch(type -> type.isAssignable(object));
+  private <T> BaseTypeAdapter getBaseTypeAdapter(T object) {
+    return typeAdapters.stream()
+        .filter(typeAdapter -> typeAdapter.isAssignable(object))
+        .findFirst()
+        .orElse(new DefaultTypeAdapter());
   }
 }
