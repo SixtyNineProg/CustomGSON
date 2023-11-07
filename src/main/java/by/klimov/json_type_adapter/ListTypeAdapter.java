@@ -12,8 +12,6 @@ import java.util.Objects;
 
 public class ListTypeAdapter implements BaseTypeAdapter {
 
-  private final TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
-
   @Override
   public <T> boolean isAssignable(T object) {
     return object instanceof List<?>;
@@ -31,6 +29,7 @@ public class ListTypeAdapter implements BaseTypeAdapter {
     List<Objects> objectsList = (List<Objects>) object;
     for (Iterator<Objects> iterator = objectsList.iterator(); iterator.hasNext(); ) {
       Object iterObject = iterator.next();
+      TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
       BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(iterObject);
       sb.append(baseTypeAdapter.mapObjectToStringJson(iterObject));
       if (iterator.hasNext()) {

@@ -2,13 +2,16 @@ package by.klimov.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import by.klimov.dto.Order;
 import by.klimov.dto.Product;
 import by.klimov.gson_type_adapter.LocalDateTypeAdapter;
+import by.klimov.util.ListTestData;
 import by.klimov.util.OrderTestData;
 import by.klimov.util.ProductTestData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -38,6 +41,19 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(product);
+
+    // Then
+    JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
+  }
+
+  @Test
+  void mapObjectToJson_whenOrderToJson_thenValidJsonExpected() throws JSONException {
+    // Given
+    Order order = OrderTestData.builder().build().buildOrder();
+    String expected = gson.toJson(order);
+
+    // When
+    String actual = jsonService.mapObjectToJson(order);
 
     // Then
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
@@ -116,6 +132,19 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(localDate);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputStringsList_thenStringFromStringsListExpected() {
+    // Given
+    List<String> strings = ListTestData.builder().build().getStrings();
+    String expected = gson.toJson(strings);
+
+    // When
+    String actual = jsonService.mapObjectToJson(strings);
 
     // Then
     assertThat(actual).isEqualTo(expected);
