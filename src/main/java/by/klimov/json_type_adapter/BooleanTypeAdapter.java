@@ -1,10 +1,10 @@
-package by.klimov.type_adapter;
+package by.klimov.json_type_adapter;
 
-public class DoubleTypeAdapter implements BaseTypeAdapter {
+public class BooleanTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public <T> boolean isAssignable(T object) {
-    return object instanceof Double;
+    return object instanceof Boolean;
   }
 
   @Override

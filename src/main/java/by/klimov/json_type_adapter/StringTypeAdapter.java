@@ -1,5 +1,6 @@
-package by.klimov.type_adapter;
+package by.klimov.json_type_adapter;
 
+import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
 public class StringTypeAdapter implements BaseTypeAdapter {
 
@@ -15,6 +16,6 @@ public class StringTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
-    return new StringBuilder("\"" + object + "\"");
+    return new StringBuilder(DOUBLE_QUOTE + object + DOUBLE_QUOTE);
   }
 }

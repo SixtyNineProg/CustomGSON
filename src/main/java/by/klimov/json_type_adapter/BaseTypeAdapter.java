@@ -1,6 +1,4 @@
-package by.klimov.type_adapter;
-
-import java.lang.reflect.Type;
+package by.klimov.json_type_adapter;
 
 public interface BaseTypeAdapter {
 

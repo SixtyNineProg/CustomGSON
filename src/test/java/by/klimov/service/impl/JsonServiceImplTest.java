@@ -3,18 +3,22 @@ package by.klimov.service.impl;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import by.klimov.dto.Product;
+import by.klimov.gson_type_adapter.LocalDateTypeAdapter;
+import by.klimov.util.OrderTestData;
 import by.klimov.util.ProductTestData;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import java.time.LocalDate;
+import java.util.UUID;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import java.util.UUID;
-
 class JsonServiceImplTest {
 
-  private final Gson gson = new Gson();
+  private final Gson gson =
+      new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter()).create();
   private final JsonServiceImpl jsonService = new JsonServiceImpl();
 
   @Test
@@ -99,6 +103,19 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(uuid);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputLocalDate_thenStringFromLocalDateTimeExpected() {
+    // Given
+    LocalDate localDate = OrderTestData.builder().build().getCreateDate();
+    String expected = gson.toJson(localDate);
+
+    // When
+    String actual = jsonService.mapObjectToJson(localDate);
 
     // Then
     assertThat(actual).isEqualTo(expected);

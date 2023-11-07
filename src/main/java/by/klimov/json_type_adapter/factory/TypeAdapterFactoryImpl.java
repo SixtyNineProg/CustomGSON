@@ -1,12 +1,13 @@
-package by.klimov.type_adapter.factory;
+package by.klimov.json_type_adapter.factory;
 
-import by.klimov.type_adapter.BaseTypeAdapter;
-import by.klimov.type_adapter.BooleanTypeAdapter;
-import by.klimov.type_adapter.DefaultTypeAdapter;
-import by.klimov.type_adapter.DoubleTypeAdapter;
-import by.klimov.type_adapter.NullTypeAdapter;
-import by.klimov.type_adapter.StringTypeAdapter;
-import by.klimov.type_adapter.UuidTypeAdapter;
+import by.klimov.json_type_adapter.BaseTypeAdapter;
+import by.klimov.json_type_adapter.BooleanTypeAdapter;
+import by.klimov.json_type_adapter.DefaultTypeAdapter;
+import by.klimov.json_type_adapter.DoubleTypeAdapter;
+import by.klimov.json_type_adapter.LocalDateTypeAdapter;
+import by.klimov.json_type_adapter.NullTypeAdapter;
+import by.klimov.json_type_adapter.StringTypeAdapter;
+import by.klimov.json_type_adapter.UuidTypeAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +24,8 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
             new BooleanTypeAdapter(),
             new DoubleTypeAdapter(),
             new UuidTypeAdapter(),
-            new StringTypeAdapter()));
+            new StringTypeAdapter(),
+            new LocalDateTypeAdapter()));
   }
 
   @Override

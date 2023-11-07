@@ -1,11 +1,10 @@
-package by.klimov.type_adapter;
+package by.klimov.json_type_adapter;
 
-import java.util.UUID;
+public class DoubleTypeAdapter implements BaseTypeAdapter {
 
-public class UuidTypeAdapter implements BaseTypeAdapter {
   @Override
   public <T> boolean isAssignable(T object) {
-    return object instanceof UUID;
+    return object instanceof Double;
   }
 
   @Override
@@ -15,6 +14,6 @@ public class UuidTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
-    return new StringBuilder("\"" + object.toString() + "\"");
+    return new StringBuilder(object.toString());
   }
 }

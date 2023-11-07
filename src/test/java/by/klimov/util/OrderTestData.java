@@ -2,8 +2,8 @@ package by.klimov.util;
 
 import by.klimov.dto.Order;
 import by.klimov.dto.Product;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
@@ -19,8 +19,8 @@ public class OrderTestData {
   private List<Product> products = ProductTestData.builder().build().buildProducts();
 
   @Builder.Default
-  private OffsetDateTime createDate =
-      OffsetDateTime.parse("1980-04-09T08:20:45+07:00", DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+  private LocalDate createDate =
+          LocalDate.of(2020, Month.JANUARY, 8);
 
   public Order buildOrder() {
     return Order.builder()

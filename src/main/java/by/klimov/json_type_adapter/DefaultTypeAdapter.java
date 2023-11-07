@@ -1,4 +1,4 @@
-package by.klimov.type_adapter;
+package by.klimov.json_type_adapter;
 
 import static by.klimov.util.StringLiteral.COLON;
 import static by.klimov.util.StringLiteral.COMMA;
@@ -6,8 +6,8 @@ import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 import static by.klimov.util.StringLiteral.LEFT_BRACE;
 import static by.klimov.util.StringLiteral.RIGHT_BRACE;
 
-import by.klimov.type_adapter.factory.TypeAdapterFactory;
-import by.klimov.type_adapter.factory.TypeAdapterFactoryImpl;
+import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
+import by.klimov.json_type_adapter.factory.TypeAdapterFactoryImpl;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;

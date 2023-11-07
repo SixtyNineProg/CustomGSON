@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StringLiteral {
+
   public static final String DOUBLE_QUOTE = "\"";
   public static final String COLON = ":";
   public static final String COMMA = ",";

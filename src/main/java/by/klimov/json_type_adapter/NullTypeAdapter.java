@@ -1,4 +1,4 @@
-package by.klimov.type_adapter;
+package by.klimov.json_type_adapter;
 
 import java.util.Objects;
 
