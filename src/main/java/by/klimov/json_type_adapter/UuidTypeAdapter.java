@@ -1,8 +1,8 @@
 package by.klimov.json_type_adapter;
 
-import java.util.UUID;
-
 import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
+
+import java.util.UUID;
 
 public class UuidTypeAdapter implements BaseTypeAdapter {
   @Override

@@ -12,19 +12,22 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public class LocalDateTypeAdapter implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
+public class LocalDateTypeAdapter
+    implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(Constant.LOCAL_DATE_FORMAT);
+  private final DateTimeFormatter formatter =
+      DateTimeFormatter.ofPattern(Constant.LOCAL_DATE_FORMAT);
 
-    @Override
-    public JsonElement serialize(final LocalDate date, final Type typeOfSrc,
-                                 final JsonSerializationContext context) {
-        return new JsonPrimitive(date.format(formatter));
-    }
+  @Override
+  public JsonElement serialize(
+      final LocalDate date, final Type typeOfSrc, final JsonSerializationContext context) {
+    return new JsonPrimitive(date.format(formatter));
+  }
 
-    @Override
-    public LocalDate deserialize(final JsonElement json, final Type typeOfT,
-                                 final JsonDeserializationContext context) throws JsonParseException {
-        return LocalDate.parse(json.getAsString(), formatter);
-    }
+  @Override
+  public LocalDate deserialize(
+      final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
+      throws JsonParseException {
+    return LocalDate.parse(json.getAsString(), formatter);
+  }
 }

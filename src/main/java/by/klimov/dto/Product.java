@@ -8,8 +8,8 @@ import lombok.Data;
 @Builder
 public class Product {
 
-    private UUID id;
-    private String name;
-    private Double price;
-    private Boolean isEnable;
+  private UUID id;
+  private String name;
+  private Double price;
+  private Boolean isEnable;
 }

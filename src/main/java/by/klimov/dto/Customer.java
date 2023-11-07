@@ -11,9 +11,9 @@ import java.util.UUID;
 @Builder
 public class Customer {
 
-    private UUID id;
-    private String firstName;
-    private String lastName;
-    private LocalDate dateBirth;
-    private List<Order> orders;
+  private UUID id;
+  private String firstName;
+  private String lastName;
+  private LocalDate dateBirth;
+  private List<Order> orders;
 }
