@@ -2,35 +2,36 @@ package by.klimov.type_adapter.factory;
 
 import by.klimov.type_adapter.BaseTypeAdapter;
 import by.klimov.type_adapter.BooleanTypeAdapter;
-import by.klimov.type_adapter.DateTypeAdapter;
+import by.klimov.type_adapter.DefaultTypeAdapter;
 import by.klimov.type_adapter.DoubleTypeAdapter;
-import by.klimov.type_adapter.LocalDateTimeTypeAdapter;
-import by.klimov.type_adapter.StringTypeAdapter;
+import by.klimov.type_adapter.NullTypeAdapter;
+import by.klimov.type_adapter.UuidTypeAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
-public class DefaultTypeAdapterFactory implements TypeAdapterFactory {
+public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
 
   private final List<BaseTypeAdapter> typeAdapters;
 
-  public DefaultTypeAdapterFactory() {
+  public TypeAdapterFactoryImpl() {
     this.typeAdapters = new ArrayList<>();
     typeAdapters.addAll(
         Arrays.asList(
-            new BooleanTypeAdapter(),
-            new DateTypeAdapter(),
-            new LocalDateTimeTypeAdapter(),
-            new DoubleTypeAdapter(),
-            new StringTypeAdapter()));
+//            new BooleanTypeAdapter(),
+//            new DoubleTypeAdapter(),
+            new UuidTypeAdapter()));
   }
 
   @Override
   public <T> BaseTypeAdapter getTypeAdapter(T object) {
-    return typeAdapters.stream()
-        .filter(typeAdapter -> isAssignableFrom(object))
-        .findFirst()
-        .orElseThrow();
+    return Objects.isNull(object)
+        ? new NullTypeAdapter()
+        : typeAdapters.stream()
+            .filter(typeAdapter -> isAssignableFrom(object))
+            .findFirst()
+            .orElse(new DefaultTypeAdapter());
   }
 
   private <T> boolean isAssignableFrom(T object) {

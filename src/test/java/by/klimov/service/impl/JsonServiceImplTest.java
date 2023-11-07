@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
+import java.util.UUID;
+
 class JsonServiceImplTest {
 
   private final Gson gson = new Gson();
@@ -64,7 +66,7 @@ class JsonServiceImplTest {
   }
 
   @Test
-  void mapObjectToJson_whenInputNumber_thenStringFromNumberExpected() {
+  void mapObjectToJson_whenInputDouble_thenStringFromDoubleExpected() {
     // Given
     Double price = ProductTestData.builder().build().getPrice();
     String expected = gson.toJson(price);
@@ -84,6 +86,21 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(isEnable);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputUuid_thenStringFromUuidExpected() {
+    // Given
+    UUID uuid = ProductTestData.builder().build().getUuid();
+    String expected = gson.toJson(uuid);
+
+    // When
+    String actual = jsonService.mapObjectToJson(uuid);
+
+    boolean b = uuid instanceof UUID;
 
     // Then
     assertThat(actual).isEqualTo(expected);

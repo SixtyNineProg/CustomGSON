@@ -1,10 +1,14 @@
 package by.klimov.type_adapter;
 
-public class DoubleTypeAdapter implements BaseTypeAdapter {
+import java.util.Objects;
+
+public class NullTypeAdapter implements BaseTypeAdapter {
+
+  public static final String STRING_NULL = "null";
 
   @Override
   public <T> boolean isAssignable(T object) {
-    return object instanceof Double;
+    return Objects.isNull(object);
   }
 
   @Override
@@ -14,6 +18,6 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
-    return new StringBuilder(object.toString());
+    return new StringBuilder(STRING_NULL);
   }
 }

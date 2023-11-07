@@ -1,6 +1,5 @@
 package by.klimov.type_adapter;
 
-import org.apache.commons.text.StringEscapeUtils;
 
 public class StringTypeAdapter implements BaseTypeAdapter {
 
@@ -15,7 +14,7 @@ public class StringTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> String mapObjectToStringJson(T object) {
-    return "\"" + object + "\"";
+  public <T> StringBuilder mapObjectToStringJson(T object) {
+    return new StringBuilder("\"" + object + "\"");
   }
 }

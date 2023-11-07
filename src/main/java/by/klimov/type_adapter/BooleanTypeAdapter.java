@@ -13,7 +13,7 @@ public class BooleanTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> String mapObjectToStringJson(T object) {
-    return object.toString();
+  public <T> StringBuilder mapObjectToStringJson(T object) {
+    return new StringBuilder(object.toString());
   }
 }
