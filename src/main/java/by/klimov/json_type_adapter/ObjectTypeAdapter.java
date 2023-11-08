@@ -8,7 +8,7 @@ import static by.klimov.util.StringLiteral.RIGHT_BRACE;
 
 import by.klimov.exception.SerializationException;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
-import by.klimov.json_type_adapter.factory.TypeAdapterFactoryImpl;
+import by.klimov.json_type_adapter.factory.impl.TypeAdapterFactoryImpl;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Iterator;

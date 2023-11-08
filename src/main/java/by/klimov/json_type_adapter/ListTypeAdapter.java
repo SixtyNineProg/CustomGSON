@@ -4,7 +4,7 @@ import static by.klimov.util.StringLiteral.COMMA;
 import static by.klimov.util.StringLiteral.LEFT_BRACKET;
 
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
-import by.klimov.json_type_adapter.factory.TypeAdapterFactoryImpl;
+import by.klimov.json_type_adapter.factory.impl.TypeAdapterFactoryImpl;
 import by.klimov.util.StringLiteral;
 import java.util.Iterator;
 import java.util.List;

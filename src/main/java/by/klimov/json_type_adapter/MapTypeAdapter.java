@@ -6,7 +6,7 @@ import static by.klimov.util.StringLiteral.LEFT_BRACE;
 import static by.klimov.util.StringLiteral.RIGHT_BRACE;
 
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
-import by.klimov.json_type_adapter.factory.TypeAdapterFactoryImpl;
+import by.klimov.json_type_adapter.factory.impl.TypeAdapterFactoryImpl;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;

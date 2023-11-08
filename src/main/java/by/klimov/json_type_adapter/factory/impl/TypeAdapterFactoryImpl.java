@@ -1,4 +1,4 @@
-package by.klimov.json_type_adapter.factory;
+package by.klimov.json_type_adapter.factory.impl;
 
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
@@ -11,6 +11,7 @@ import by.klimov.json_type_adapter.ObjectTypeAdapter;
 import by.klimov.json_type_adapter.StringTypeAdapter;
 import by.klimov.json_type_adapter.UuidTypeAdapter;
 import by.klimov.json_type_adapter.ZonedDateTimeTypeAdapter;
+import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,13 +36,21 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
   }
 
   @Override
+  public BaseTypeAdapter getTypeAdapter(String value) {
+    return Objects.isNull(value) ? new NullTypeAdapter() : getBaseTypeAdapter(value);
+  }
+
+  @Override
   public <T> BaseTypeAdapter getTypeAdapter(T object) {
     return Objects.isNull(object) ? new NullTypeAdapter() : getBaseTypeAdapter(object);
   }
 
-  @Override
-  public BaseTypeAdapter getTypeAdapter(String value) {
-    return Objects.isNull(value) ? new NullTypeAdapter() : getBaseTypeAdapter(value);
+  private BaseTypeAdapter getBaseTypeAdapter(String value) {
+    return typeAdapters.stream()
+        .filter(typeAdapter -> !(typeAdapter instanceof StringTypeAdapter))
+        .filter(typeAdapter -> typeAdapter.isAssignable(value))
+        .findFirst()
+        .orElse(new StringTypeAdapter());
   }
 
   private <T> BaseTypeAdapter getBaseTypeAdapter(T object) {
@@ -49,12 +58,5 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
         .filter(typeAdapter -> typeAdapter.isAssignable(object))
         .findFirst()
         .orElse(new ObjectTypeAdapter());
-  }
-
-  private BaseTypeAdapter getBaseTypeAdapter(String value) {
-    return typeAdapters.stream()
-        .filter(typeAdapter -> typeAdapter.isAssignable(value))
-        .findFirst()
-        .orElse(new StringTypeAdapter());
   }
 }
