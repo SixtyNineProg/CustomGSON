@@ -2,12 +2,12 @@ package by.klimov.json_type_adapter.factory;
 
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
-import by.klimov.json_type_adapter.ObjectTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
 import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
 import by.klimov.json_type_adapter.MapTypeAdapter;
 import by.klimov.json_type_adapter.NullTypeAdapter;
+import by.klimov.json_type_adapter.ObjectTypeAdapter;
 import by.klimov.json_type_adapter.StringTypeAdapter;
 import by.klimov.json_type_adapter.UuidTypeAdapter;
 import by.klimov.json_type_adapter.ZonedDateTimeTypeAdapter;

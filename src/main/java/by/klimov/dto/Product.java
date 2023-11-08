@@ -1,7 +1,6 @@
 package by.klimov.dto;
 
 import java.util.UUID;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

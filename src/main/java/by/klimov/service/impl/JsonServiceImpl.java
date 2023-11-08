@@ -13,6 +13,15 @@ public class JsonServiceImpl implements JsonService {
 
   private final TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
 
+  @SuppressWarnings("java:S3011")
+  private static <T> void setFiledValue(Field field, T obj, Map<String, Object> map) {
+    try {
+      field.set(obj, map.get(field.getName()));
+    } catch (IllegalAccessException e) {
+      throw new SerializationException(e);
+    }
+  }
+
   @Override
   public <T> T mapJsonToObject(String json, Class<T> tClass) {
     BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(json);
@@ -24,15 +33,6 @@ public class JsonServiceImpl implements JsonService {
   public <T> String mapObjectToJson(T object) {
     BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(object);
     return baseTypeAdapter.mapObjectToStringJson(object).toString();
-  }
-
-  @SuppressWarnings("java:S3011")
-  private static <T> void setFiledValue(Field field, T obj, Map<String, Object> map) {
-    try {
-      field.set(obj, map.get(field.getName()));
-    } catch (IllegalAccessException e) {
-      throw new SerializationException(e);
-    }
   }
 
   @SuppressWarnings("java:S3011")

@@ -9,6 +9,15 @@ import java.time.format.DateTimeParseException;
 
 public class LocalDateTypeAdapter implements BaseTypeAdapter {
 
+  public static boolean isLocalDate(String string) {
+    try {
+      LocalDate.parse(string);
+      return true;
+    } catch (DateTimeParseException e) {
+      return false;
+    }
+  }
+
   @Override
   public <T> boolean isAssignable(T object) {
     return object instanceof LocalDate;
@@ -29,14 +38,5 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
     DateTimeFormatter formatters = DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT);
     LocalDate localDate = (LocalDate) object;
     return new StringBuilder(DOUBLE_QUOTE + localDate.format(formatters) + DOUBLE_QUOTE);
-  }
-
-  public static boolean isLocalDate(String string) {
-    try {
-      LocalDate.parse(string);
-      return true;
-    } catch (DateTimeParseException e) {
-      return false;
-    }
   }
 }
