@@ -14,7 +14,7 @@ public class JsonServiceImpl implements JsonService {
   private final TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
 
   @SuppressWarnings("java:S3011")
-  private static <T> void setFiledValue(Field field, T obj, Map<String, Object> map) {
+  private <T> void setFiledValue(Field field, T obj, Map<String, Object> map) {
     try {
       field.set(obj, map.get(field.getName()));
     } catch (IllegalAccessException e) {
