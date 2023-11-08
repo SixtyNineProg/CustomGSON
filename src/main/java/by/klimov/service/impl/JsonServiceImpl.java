@@ -58,14 +58,4 @@ public class JsonServiceImpl implements JsonService {
       throw new SerializationException(e);
     }
   }
-
-  private <T> Object getFieldObject(T object, Field field) {
-    Object fieldObject;
-    try {
-      fieldObject = field.get(object);
-    } catch (IllegalAccessException e) {
-      throw new SerializationException(e);
-    }
-    return fieldObject;
-  }
 }
