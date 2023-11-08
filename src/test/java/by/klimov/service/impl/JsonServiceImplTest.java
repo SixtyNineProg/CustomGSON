@@ -36,10 +36,18 @@ class JsonServiceImplTest {
   @Test
   void mapJsonToObject_when_then() {
     // Given
+    Product expected = ProductTestData.builder().build().buildProduct();
+    String json = gson.toJson(expected);
 
     // When
+    Product actual = jsonService.mapJsonToObject(json, Product.class);
 
     // Then
+    assertThat(actual)
+        .hasFieldOrPropertyWithValue(Product.Fields.name, expected.getName())
+        .hasFieldOrPropertyWithValue(Product.Fields.id, expected.getId())
+        .hasFieldOrPropertyWithValue(Product.Fields.isEnable, expected.getIsEnable())
+        .hasFieldOrPropertyWithValue(Product.Fields.price, expected.getPrice());
   }
 
   @Test

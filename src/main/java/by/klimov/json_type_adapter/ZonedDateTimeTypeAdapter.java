@@ -5,6 +5,7 @@ import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
 
@@ -14,7 +15,12 @@ public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
+  public boolean isAssignable(String value) {
+    return isZonedDateTime(value);
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String value) {
     return null;
   }
 
@@ -23,5 +29,14 @@ public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
     DateTimeFormatter formatters = DateTimeFormatter.ofPattern(ZONED_DATE_TIME_FORMAT);
     ZonedDateTime zonedDateTime = (ZonedDateTime) object;
     return new StringBuilder(DOUBLE_QUOTE + zonedDateTime.format(formatters) + DOUBLE_QUOTE);
+  }
+
+  public boolean isZonedDateTime(String string) {
+    try {
+      ZonedDateTime.parse(string);
+      return true;
+    } catch (DateTimeParseException e) {
+      return false;
+    }
   }
 }

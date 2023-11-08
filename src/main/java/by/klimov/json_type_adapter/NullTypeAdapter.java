@@ -12,7 +12,12 @@ public class NullTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
+  public boolean isAssignable(String value) {
+    return Objects.isNull(value);
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String value) {
     return null;
   }
 

@@ -5,6 +5,7 @@ import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class LocalDateTypeAdapter implements BaseTypeAdapter {
 
@@ -14,7 +15,12 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
+  public boolean isAssignable(String value) {
+    return isLocalDate(value);
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String value) {
     return null;
   }
 
@@ -23,5 +29,14 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
     DateTimeFormatter formatters = DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT);
     LocalDate localDate = (LocalDate) object;
     return new StringBuilder(DOUBLE_QUOTE + localDate.format(formatters) + DOUBLE_QUOTE);
+  }
+
+  public static boolean isLocalDate(String string) {
+    try {
+      LocalDate.parse(string);
+      return true;
+    } catch (DateTimeParseException e) {
+      return false;
+    }
   }
 }

@@ -2,7 +2,6 @@ package by.klimov.json_type_adapter.factory;
 
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
-import by.klimov.json_type_adapter.DefaultTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
 import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
@@ -27,7 +26,6 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
             new BooleanTypeAdapter(),
             new DoubleTypeAdapter(),
             new UuidTypeAdapter(),
-            new StringTypeAdapter(),
             new LocalDateTypeAdapter(),
             new ZonedDateTimeTypeAdapter(),
             new ListTypeAdapter(),
@@ -39,10 +37,22 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
     return Objects.isNull(object) ? new NullTypeAdapter() : getBaseTypeAdapter(object);
   }
 
+  @Override
+  public BaseTypeAdapter getTypeAdapter(String value) {
+    return Objects.isNull(value) ? new NullTypeAdapter() : getBaseTypeAdapter(value);
+  }
+
   private <T> BaseTypeAdapter getBaseTypeAdapter(T object) {
     return typeAdapters.stream()
         .filter(typeAdapter -> typeAdapter.isAssignable(object))
         .findFirst()
-        .orElse(new DefaultTypeAdapter());
+        .orElse(new StringTypeAdapter());
+  }
+
+  private BaseTypeAdapter getBaseTypeAdapter(String value) {
+    return typeAdapters.stream()
+        .filter(typeAdapter -> typeAdapter.isAssignable(value))
+        .findFirst()
+        .orElse(new StringTypeAdapter());
   }
 }

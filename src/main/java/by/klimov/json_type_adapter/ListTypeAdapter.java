@@ -18,7 +18,12 @@ public class ListTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
+  public boolean isAssignable(String value) {
+    return value.startsWith(LEFT_BRACKET);
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String json) {
     return null;
   }
 

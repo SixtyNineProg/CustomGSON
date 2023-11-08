@@ -8,12 +8,26 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
-    return null;
+  public boolean isAssignable(String value) {
+    return isReal(value);
+  }
+
+  @Override
+  public Double mapStringJsonToObject(String value) {
+    return Double.parseDouble(value);
   }
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(object.toString());
+  }
+
+  private boolean isReal(String s) {
+    try {
+      Double.parseDouble(s);
+      return true;
+    } catch (NumberFormatException e) {
+      return false;
+    }
   }
 }

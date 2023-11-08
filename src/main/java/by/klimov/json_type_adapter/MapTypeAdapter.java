@@ -7,9 +7,12 @@ import static by.klimov.util.StringLiteral.RIGHT_BRACE;
 
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactoryImpl;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MapTypeAdapter implements BaseTypeAdapter {
 
@@ -19,8 +22,24 @@ public class MapTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
-    return null;
+  public boolean isAssignable(String value) {
+    return value.startsWith(LEFT_BRACE);
+  }
+
+  @Override
+  public Map<String, Object> mapStringJsonToObject(String json) {
+    TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
+    Map<String, Object> map = new HashMap<>();
+    Pattern pattern =
+        Pattern.compile("\"(.*?)\":\\s*(\".*?\"|\\d*[.]?\\d+|true|false|\\{.*?\\}|\\[.*?\\])");
+    Matcher matcher = pattern.matcher(json);
+    while (matcher.find()) {
+      String key = matcher.group(1);
+      String value = matcher.group(2);
+      BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value);
+      map.put(key, typeAdapter.mapStringJsonToObject(value));
+    }
+    return map;
   }
 
   @Override

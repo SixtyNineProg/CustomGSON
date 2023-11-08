@@ -8,8 +8,13 @@ public class BooleanTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
-    return null;
+  public boolean isAssignable(String value) {
+    return value.equals(Boolean.TRUE.toString()) || value.equals(Boolean.FALSE.toString());
+  }
+
+  @Override
+  public Boolean mapStringJsonToObject(String value) {
+    return Boolean.valueOf(value);
   }
 
   @Override

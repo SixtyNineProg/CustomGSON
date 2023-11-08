@@ -10,8 +10,13 @@ public class StringTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
-    return null;
+  public boolean isAssignable(String value) {
+    return value.startsWith("\"");
+  }
+
+  @Override
+  public String mapStringJsonToObject(String value) {
+    return value.substring(1, value.length() - 1);
   }
 
   @Override
