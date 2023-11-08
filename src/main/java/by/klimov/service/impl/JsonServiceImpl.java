@@ -29,27 +29,10 @@ public class JsonServiceImpl implements JsonService {
     return buildObject(tClass, map);
   }
 
-  @SuppressWarnings("java:S3011")
   @Override
   public <T> String mapObjectToJson(T object) {
-    StringBuilder sb = new StringBuilder(LEFT_BRACE);
-    List<Field> fields = Arrays.stream(object.getClass().getDeclaredFields()).toList();
-    for (Iterator<Field> iterator = fields.iterator(); iterator.hasNext(); ) {
-      Field field = iterator.next();
-      field.setAccessible(true);
-      Object fieldObject = getFieldObject(object, field);
-      BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(fieldObject);
-      sb.append(DOUBLE_QUOTE)
-              .append(field.getName())
-              .append(DOUBLE_QUOTE)
-              .append(COLON)
-              .append(baseTypeAdapter.mapObjectToStringJson(fieldObject));
-      if (iterator.hasNext()) {
-        sb.append(COMMA);
-      }
-    }
-    sb.append(RIGHT_BRACE);
-    return sb.toString();
+    BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(object);
+    return baseTypeAdapter.mapObjectToStringJson(object).toString();
   }
 
   @SuppressWarnings("java:S3011")

@@ -2,6 +2,7 @@ package by.klimov.json_type_adapter.factory;
 
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
+import by.klimov.json_type_adapter.DefaultTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
 import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
@@ -26,6 +27,7 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
             new BooleanTypeAdapter(),
             new DoubleTypeAdapter(),
             new UuidTypeAdapter(),
+            new StringTypeAdapter(),
             new LocalDateTypeAdapter(),
             new ZonedDateTimeTypeAdapter(),
             new ListTypeAdapter(),
@@ -46,7 +48,7 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
     return typeAdapters.stream()
         .filter(typeAdapter -> typeAdapter.isAssignable(object))
         .findFirst()
-        .orElse(new StringTypeAdapter());
+        .orElse(new DefaultTypeAdapter());
   }
 
   private BaseTypeAdapter getBaseTypeAdapter(String value) {
