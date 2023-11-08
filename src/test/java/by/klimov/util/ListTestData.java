@@ -8,5 +8,5 @@ import lombok.Data;
 @Builder(setterPrefix = "with", toBuilder = true)
 public class ListTestData {
 
-  @Builder.Default List<String> strings = List.of("one", "two", "three");
+  @Builder.Default private List<String> strings = List.of("one", "two", "three");
 }

@@ -9,6 +9,7 @@ import by.klimov.gson_type_adapter.LocalDateTypeAdapter;
 import by.klimov.gson_type_adapter.ZonedDateTimeTypeAdapter;
 import by.klimov.util.CustomerTestData;
 import by.klimov.util.ListTestData;
+import by.klimov.util.MapTestData;
 import by.klimov.util.OrderTestData;
 import by.klimov.util.ProductTestData;
 import com.google.gson.Gson;
@@ -16,6 +17,7 @@ import com.google.gson.GsonBuilder;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -61,6 +63,19 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(order);
+
+    // Then
+    JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
+  }
+
+  @Test
+  void mapObjectToJson_whenCustomerToJson_thenValidJsonExpected() throws JSONException {
+    // Given
+    Customer customer = CustomerTestData.builder().build().buildCustomer();
+    String expected = gson.toJson(customer);
+
+    // When
+    String actual = jsonService.mapObjectToJson(customer);
 
     // Then
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
@@ -177,6 +192,19 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(zonedDateTime);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputMapWithStringKeyAndStringValue_thenStringFromMapExpected() {
+    // Given
+    Map<String, String> map = MapTestData.builder().build().getMap();
+    String expected = gson.toJson(map);
+
+    // When
+    String actual = jsonService.mapObjectToJson(map);
 
     // Then
     assertThat(actual).isEqualTo(expected);
