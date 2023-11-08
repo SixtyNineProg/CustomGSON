@@ -5,16 +5,15 @@ import static by.klimov.util.StringLiteral.LEFT_BRACKET;
 
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactoryImpl;
-import by.klimov.util.StringLiteral;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.Map;
+import java.util.Set;
 
-public class ListTypeAdapter implements BaseTypeAdapter {
+public class MapTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public <T> boolean isAssignable(T object) {
-    return object instanceof List<?>;
+    return object instanceof Map<?, ?>;
   }
 
   @Override
@@ -22,21 +21,27 @@ public class ListTypeAdapter implements BaseTypeAdapter {
     return null;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
+    Map<?, ?> map = (Map<?, ?>) object;
     StringBuilder stringBuilder = new StringBuilder(LEFT_BRACKET);
-    List<Objects> objectsList = (List<Objects>) object;
-    for (Iterator<Objects> iterator = objectsList.iterator(); iterator.hasNext(); ) {
-      Object iterObject = iterator.next();
+    Set<? extends Map.Entry<?, ?>> entrySet = map.entrySet();
+    for (Iterator<? extends Map.Entry<?, ?>> iterator = entrySet.iterator(); iterator.hasNext(); ) {
       TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
-      BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(iterObject);
-      stringBuilder.append(baseTypeAdapter.mapObjectToStringJson(iterObject));
+      Map.Entry<?, ?> iteratorObject = iterator.next();
+
+      Object key = iteratorObject.getKey();
+      BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(key);
+      stringBuilder.append(baseTypeAdapter.mapObjectToStringJson(key));
+
+      Object value = iteratorObject.getValue();
+      baseTypeAdapter = typeAdapterFactory.getTypeAdapter(value);
+      stringBuilder.append(baseTypeAdapter.mapObjectToStringJson(value));
+
       if (iterator.hasNext()) {
         stringBuilder.append(COMMA);
       }
     }
-    stringBuilder.append(StringLiteral.RIGHT_BRACKET);
     return stringBuilder;
   }
 }

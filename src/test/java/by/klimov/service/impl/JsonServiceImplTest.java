@@ -2,15 +2,19 @@ package by.klimov.service.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import by.klimov.dto.Customer;
 import by.klimov.dto.Order;
 import by.klimov.dto.Product;
 import by.klimov.gson_type_adapter.LocalDateTypeAdapter;
+import by.klimov.gson_type_adapter.ZonedDateTimeTypeAdapter;
+import by.klimov.util.CustomerTestData;
 import by.klimov.util.ListTestData;
 import by.klimov.util.OrderTestData;
 import by.klimov.util.ProductTestData;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.json.JSONException;
@@ -21,7 +25,10 @@ import org.skyscreamer.jsonassert.JSONCompareMode;
 class JsonServiceImplTest {
 
   private final Gson gson =
-      new GsonBuilder().registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter()).create();
+      new GsonBuilder()
+          .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+          .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter())
+          .create();
   private final JsonServiceImpl jsonService = new JsonServiceImpl();
 
   @Test
@@ -60,13 +67,12 @@ class JsonServiceImplTest {
   }
 
   @Test
-  void mapObjectToJson_whenProductIsNull_thenEmptyStringExpected() {
+  void mapObjectToJson_whenIsNull_thenEmptyStringExpected() {
     // Given
-    Product product = null;
-    String expected = gson.toJson(product);
+    String expected = gson.toJson(null);
 
     // When
-    String actual = jsonService.mapObjectToJson(product);
+    String actual = jsonService.mapObjectToJson(null);
 
     // Then
     assertThat(actual).isEqualTo(expected);
@@ -145,6 +151,32 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(strings);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputCustomersList_thenStringFromCustomersListExpected() {
+    // Given
+    List<Customer> customers = CustomerTestData.builder().build().buildCustomers();
+    String expected = gson.toJson(customers);
+
+    // When
+    String actual = jsonService.mapObjectToJson(customers);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputZonedDataTime_thenStringFromZonedDataTimeExpected() {
+    // Given
+    ZonedDateTime zonedDateTime = CustomerTestData.builder().build().getDateBirth();
+    String expected = gson.toJson(zonedDateTime);
+
+    // When
+    String actual = jsonService.mapObjectToJson(zonedDateTime);
 
     // Then
     assertThat(actual).isEqualTo(expected);

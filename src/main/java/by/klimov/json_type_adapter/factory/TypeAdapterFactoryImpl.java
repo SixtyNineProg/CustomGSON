@@ -6,9 +6,11 @@ import by.klimov.json_type_adapter.DefaultTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
 import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
+import by.klimov.json_type_adapter.MapTypeAdapter;
 import by.klimov.json_type_adapter.NullTypeAdapter;
 import by.klimov.json_type_adapter.StringTypeAdapter;
 import by.klimov.json_type_adapter.UuidTypeAdapter;
+import by.klimov.json_type_adapter.ZonedDateTimeTypeAdapter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +29,9 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
             new UuidTypeAdapter(),
             new StringTypeAdapter(),
             new LocalDateTypeAdapter(),
-            new ListTypeAdapter()));
+            new ZonedDateTimeTypeAdapter(),
+            new ListTypeAdapter(),
+            new MapTypeAdapter()));
   }
 
   @Override
