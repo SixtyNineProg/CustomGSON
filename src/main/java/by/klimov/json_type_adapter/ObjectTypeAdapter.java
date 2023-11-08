@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class DefaultTypeAdapter implements BaseTypeAdapter {
+public class ObjectTypeAdapter implements BaseTypeAdapter {
 
   private final TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
 

@@ -2,7 +2,7 @@ package by.klimov.json_type_adapter.factory;
 
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
-import by.klimov.json_type_adapter.DefaultTypeAdapter;
+import by.klimov.json_type_adapter.ObjectTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
 import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
@@ -48,7 +48,7 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
     return typeAdapters.stream()
         .filter(typeAdapter -> typeAdapter.isAssignable(object))
         .findFirst()
-        .orElse(new DefaultTypeAdapter());
+        .orElse(new ObjectTypeAdapter());
   }
 
   private BaseTypeAdapter getBaseTypeAdapter(String value) {

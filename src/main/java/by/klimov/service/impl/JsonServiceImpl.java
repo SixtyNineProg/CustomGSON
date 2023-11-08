@@ -1,11 +1,5 @@
 package by.klimov.service.impl;
 
-import static by.klimov.util.StringLiteral.COLON;
-import static by.klimov.util.StringLiteral.COMMA;
-import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
-import static by.klimov.util.StringLiteral.LEFT_BRACE;
-import static by.klimov.util.StringLiteral.RIGHT_BRACE;
-
 import by.klimov.exception.SerializationException;
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
@@ -13,9 +7,6 @@ import by.klimov.json_type_adapter.factory.TypeAdapterFactoryImpl;
 import by.klimov.service.JsonService;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public class JsonServiceImpl implements JsonService {
