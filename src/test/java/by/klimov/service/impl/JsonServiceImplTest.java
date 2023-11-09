@@ -19,6 +19,8 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -34,7 +36,7 @@ class JsonServiceImplTest {
   private final JsonServiceImpl jsonService = new JsonServiceImpl();
 
   @Test
-  void mapJsonToObject_when_then() {
+  void mapJsonToObject_whenJsonStringToProduct_thenProductExpected() {
     // Given
     Product expected = ProductTestData.builder().build().buildProduct();
     String json = gson.toJson(expected);
@@ -96,6 +98,18 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(null);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapJsonToObject_whenInputEmptyString_thenEmptyStringExpected() {
+    // Given
+    Product expected = gson.fromJson(StringUtils.EMPTY, Product.class);
+
+    // When
+    Product actual = jsonService.mapJsonToObject(StringUtils.EMPTY, Product.class);
 
     // Then
     assertThat(actual).isEqualTo(expected);

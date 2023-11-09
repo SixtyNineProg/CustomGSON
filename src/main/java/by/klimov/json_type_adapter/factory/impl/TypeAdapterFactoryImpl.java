@@ -37,7 +37,9 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
 
   @Override
   public BaseTypeAdapter getTypeAdapter(String value) {
-    return Objects.isNull(value) ? new NullTypeAdapter() : getBaseTypeAdapter(value);
+    return Objects.isNull(value) || value.isEmpty() || value.isBlank()
+        ? new NullTypeAdapter()
+        : getBaseTypeAdapter(value);
   }
 
   @Override

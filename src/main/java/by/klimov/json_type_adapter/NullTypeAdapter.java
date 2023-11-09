@@ -13,7 +13,7 @@ public class NullTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public boolean isAssignable(String value) {
-    return Objects.isNull(value);
+    return value.isEmpty() || value.isBlank();
   }
 
   @Override

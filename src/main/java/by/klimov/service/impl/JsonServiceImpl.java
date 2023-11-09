@@ -8,16 +8,18 @@ import by.klimov.service.JsonService;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.Objects;
+import lombok.NonNull;
 
 public class JsonServiceImpl implements JsonService {
 
   private final TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
 
   @Override
-  public <T> T mapJsonToObject(String json, Class<T> tClass) {
+  public <T> T mapJsonToObject(@NonNull String json, Class<T> tClass) {
     BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(json);
     Map<String, Object> map = typeAdapter.mapStringJsonToObject(json);
-    return buildObject(tClass, map);
+    return Objects.isNull(map) ? null : buildObject(tClass, map);
   }
 
   @Override
