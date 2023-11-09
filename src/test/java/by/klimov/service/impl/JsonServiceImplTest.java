@@ -19,7 +19,6 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
@@ -129,7 +128,7 @@ class JsonServiceImplTest {
   }
 
   @Test
-  void mapObjectToJson_whenInputString_thenStringExpected() {
+  void mapJsonToObject_whenInputString_thenStringExpected() {
     // Given
     String name = ProductTestData.builder().build().getName();
     String expected = gson.fromJson(name, String.class);
@@ -155,6 +154,19 @@ class JsonServiceImplTest {
   }
 
   @Test
+  void mapJsonToObject_whenInputDoubleString_thenDoubleExpected() {
+    // Given
+    String price = ProductTestData.builder().build().getPrice().toString();
+    Double expected = gson.fromJson(price, Double.class);
+
+    // When
+    Double actual = jsonService.mapJsonToObject(price, Double.class);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
   void mapObjectToJson_whenInputBoolean_thenStringFromBooleanExpected() {
     // Given
     Boolean isEnable = ProductTestData.builder().build().getIsEnable();
@@ -162,6 +174,19 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(isEnable);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapJsonToObject_whenInputBooleanString_thenBooleanExpected() {
+    // Given
+    String isEnable = ProductTestData.builder().build().getIsEnable().toString();
+    Boolean expected = gson.fromJson(isEnable, Boolean.class);
+
+    // When
+    Boolean actual = jsonService.mapJsonToObject(isEnable, Boolean.class);
 
     // Then
     assertThat(actual).isEqualTo(expected);
@@ -181,13 +206,39 @@ class JsonServiceImplTest {
   }
 
   @Test
-  void mapObjectToJson_whenInputLocalDate_thenStringFromLocalDateTimeExpected() {
+  void mapJsonToObject_whenInputUuidString_thenUuidExpected() {
+    // Given
+    String uuid = ProductTestData.builder().build().getUuid().toString();
+    UUID expected = gson.fromJson(uuid, UUID.class);
+
+    // When
+    UUID actual = jsonService.mapJsonToObject(uuid, UUID.class);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputLocalDate_thenStringFromLocalDateExpected() {
     // Given
     LocalDate localDate = OrderTestData.builder().build().getCreateDate();
     String expected = gson.toJson(localDate);
 
     // When
     String actual = jsonService.mapObjectToJson(localDate);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapJsonToObject_whenInputLocalDateString_thenLocalDateExpected() {
+    // Given
+    String localDate = OrderTestData.builder().build().getCreateDate().toString();
+    LocalDate expected = gson.fromJson(localDate, LocalDate.class);
+
+    // When
+    LocalDate actual = jsonService.mapJsonToObject(localDate, LocalDate.class);
 
     // Then
     assertThat(actual).isEqualTo(expected);
