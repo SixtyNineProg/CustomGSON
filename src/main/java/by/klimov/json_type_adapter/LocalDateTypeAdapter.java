@@ -3,9 +3,12 @@ package by.klimov.json_type_adapter;
 import static by.klimov.util.Constant.LOCAL_DATE_FORMAT;
 import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
+import by.klimov.util.Constant;
+import by.klimov.util.StringUtil;
 import by.klimov.util.TimeUtil;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class LocalDateTypeAdapter implements BaseTypeAdapter {
 
@@ -16,12 +19,16 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public boolean isAssignable(String value) {
-    return TimeUtil.isLocalDate(value);
+    return TimeUtil.isLocalDate(StringUtil.extractString(value, Constant.STRING_REGEX))
+        || TimeUtil.isLocalDate(value);
   }
 
   @Override
   public LocalDate mapStringJsonToObject(String value) {
-    return LocalDate.parse(value);
+    String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
+    return Objects.isNull(extractedValue)
+            ? LocalDate.parse(value, Constant.LOCAL_DATE_FORMATTER)
+            : LocalDate.parse(extractedValue, Constant.LOCAL_DATE_FORMATTER);
   }
 
   @Override

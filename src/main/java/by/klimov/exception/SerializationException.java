@@ -7,4 +7,8 @@ public class SerializationException extends RuntimeException {
   public SerializationException(Exception e) {
     super(DEFAULT_ERROR_MESSAGE, e);
   }
+
+  public SerializationException(String message) {
+    super(message);
+  }
 }

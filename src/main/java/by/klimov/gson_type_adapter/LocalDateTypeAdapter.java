@@ -10,24 +10,20 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import java.lang.reflect.Type;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class LocalDateTypeAdapter
     implements JsonSerializer<LocalDate>, JsonDeserializer<LocalDate> {
 
-  private final DateTimeFormatter formatter =
-      DateTimeFormatter.ofPattern(Constant.LOCAL_DATE_FORMAT);
-
   @Override
   public JsonElement serialize(
       final LocalDate date, final Type typeOfSrc, final JsonSerializationContext context) {
-    return new JsonPrimitive(date.format(formatter));
+    return new JsonPrimitive(date.format(Constant.LOCAL_DATE_FORMATTER));
   }
 
   @Override
   public LocalDate deserialize(
       final JsonElement json, final Type typeOfT, final JsonDeserializationContext context)
       throws JsonParseException {
-    return LocalDate.parse(json.getAsString(), formatter);
+    return LocalDate.parse(json.getAsString(), Constant.LOCAL_DATE_FORMATTER);
   }
 }

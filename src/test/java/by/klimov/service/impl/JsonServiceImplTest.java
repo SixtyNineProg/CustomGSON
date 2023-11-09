@@ -234,11 +234,37 @@ class JsonServiceImplTest {
   @Test
   void mapJsonToObject_whenInputLocalDateString_thenLocalDateExpected() {
     // Given
-    String localDate = OrderTestData.builder().build().getCreateDate().toString();
+    String localDate = gson.toJson(OrderTestData.builder().build().getCreateDate());
     LocalDate expected = gson.fromJson(localDate, LocalDate.class);
 
     // When
     LocalDate actual = jsonService.mapJsonToObject(localDate, LocalDate.class);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapObjectToJson_whenInputZonedDataTime_thenStringFromZonedDataTimeExpected() {
+    // Given
+    ZonedDateTime zonedDateTime = CustomerTestData.builder().build().getDateBirth();
+    String expected = gson.toJson(zonedDateTime);
+
+    // When
+    String actual = jsonService.mapObjectToJson(zonedDateTime);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  void mapJsonToObject_whenInputZonedDataTimeString_thenZonedDataTimeExpected() {
+    // Given
+    String zonedDateTime = gson.toJson(CustomerTestData.builder().build().getDateBirth());
+    ZonedDateTime expected = gson.fromJson(zonedDateTime, ZonedDateTime.class);
+
+    // When
+    ZonedDateTime actual = jsonService.mapJsonToObject(zonedDateTime, ZonedDateTime.class);
 
     // Then
     assertThat(actual).isEqualTo(expected);
@@ -265,19 +291,6 @@ class JsonServiceImplTest {
 
     // When
     String actual = jsonService.mapObjectToJson(customers);
-
-    // Then
-    assertThat(actual).isEqualTo(expected);
-  }
-
-  @Test
-  void mapObjectToJson_whenInputZonedDataTime_thenStringFromZonedDataTimeExpected() {
-    // Given
-    ZonedDateTime zonedDateTime = CustomerTestData.builder().build().getDateBirth();
-    String expected = gson.toJson(zonedDateTime);
-
-    // When
-    String actual = jsonService.mapObjectToJson(zonedDateTime);
 
     // Then
     assertThat(actual).isEqualTo(expected);

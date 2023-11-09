@@ -9,6 +9,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import lombok.NonNull;
 
 public class JsonServiceImpl implements JsonService {
@@ -17,6 +20,9 @@ public class JsonServiceImpl implements JsonService {
 
   @Override
   public <T> T mapJsonToObject(@NonNull String json, Class<T> tClass) {
+//    if (!isValidJson(json)) {
+//      throw new SerializationException("Json isn't valid");
+//    }
     BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(json);
     if (tClass.isInstance(typeAdapter.mapStringJsonToObject(json))) {
       return typeAdapter.mapStringJsonToObject(json);
@@ -63,5 +69,12 @@ public class JsonServiceImpl implements JsonService {
     } catch (IllegalAccessException e) {
       throw new SerializationException(e);
     }
+  }
+
+  public static boolean isValidJson(String json) {
+    String pattern = "^(\\{.*\\}|\\[.*\\])$";
+    Pattern regex = Pattern.compile(pattern);
+    Matcher matcher = regex.matcher(json);
+    return matcher.matches();
   }
 }
