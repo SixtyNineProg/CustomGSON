@@ -156,7 +156,7 @@ class JsonServiceImplTest {
   @Test
   void mapJsonToObject_whenInputDoubleString_thenDoubleExpected() {
     // Given
-    String price = ProductTestData.builder().build().getPrice().toString();
+    String price = gson.toJson(ProductTestData.builder().build().getPrice());
     Double expected = gson.fromJson(price, Double.class);
 
     // When
@@ -182,7 +182,7 @@ class JsonServiceImplTest {
   @Test
   void mapJsonToObject_whenInputBooleanString_thenBooleanExpected() {
     // Given
-    String isEnable = ProductTestData.builder().build().getIsEnable().toString();
+    String isEnable = gson.toJson(ProductTestData.builder().build().getIsEnable());
     Boolean expected = gson.fromJson(isEnable, Boolean.class);
 
     // When

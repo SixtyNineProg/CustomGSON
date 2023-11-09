@@ -9,7 +9,7 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public boolean isAssignable(String value) {
-    return isReal(value);
+    return isDouble(value);
   }
 
   @Override
@@ -22,7 +22,7 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
     return new StringBuilder(object.toString());
   }
 
-  private boolean isReal(String s) {
+  private boolean isDouble(String s) {
     try {
       Double.parseDouble(s);
       return true;
