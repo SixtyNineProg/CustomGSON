@@ -18,8 +18,12 @@ public class JsonServiceImpl implements JsonService {
   @Override
   public <T> T mapJsonToObject(@NonNull String json, Class<T> tClass) {
     BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(json);
-    Map<String, Object> map = typeAdapter.mapStringJsonToObject(json);
-    return Objects.isNull(map) ? null : buildObject(tClass, map);
+    if (tClass.isInstance(typeAdapter.mapStringJsonToObject(json))) {
+      return typeAdapter.mapStringJsonToObject(json);
+    } else {
+      Map<String, Object> map = typeAdapter.mapStringJsonToObject(json);
+      return Objects.isNull(map) ? null : buildObject(tClass, map);
+    }
   }
 
   @Override

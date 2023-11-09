@@ -129,6 +129,19 @@ class JsonServiceImplTest {
   }
 
   @Test
+  void mapObjectToJson_whenInputString_thenStringExpected() {
+    // Given
+    String name = ProductTestData.builder().build().getName();
+    String expected = gson.fromJson(name, String.class);
+
+    // When
+    String actual = jsonService.mapJsonToObject(name, String.class);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
   void mapObjectToJson_whenInputDouble_thenStringFromDoubleExpected() {
     // Given
     Double price = ProductTestData.builder().build().getPrice();

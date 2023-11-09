@@ -2,7 +2,12 @@ package by.klimov.json_type_adapter;
 
 import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
+import by.klimov.util.StringUtil;
+import java.util.Objects;
+
 public class StringTypeAdapter implements BaseTypeAdapter {
+
+  public static final String STRING_REGEX = "\"(.*?)\"";
 
   @Override
   public <T> boolean isAssignable(T object) {
@@ -16,7 +21,8 @@ public class StringTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public String mapStringJsonToObject(String value) {
-    return value.substring(1, value.length() - 1);
+    String extractedValue = StringUtil.extractString(value, STRING_REGEX);
+    return Objects.isNull(extractedValue) ? value : extractedValue;
   }
 
   @Override
