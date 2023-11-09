@@ -20,6 +20,7 @@ public class JsonServiceImpl implements JsonService {
 
   @Override
   public <T> T mapJsonToObject(@NonNull String json, Class<T> tClass) {
+    //TODO isValidJson
 //    if (!isValidJson(json)) {
 //      throw new SerializationException("Json isn't valid");
 //    }
@@ -76,5 +77,11 @@ public class JsonServiceImpl implements JsonService {
     Pattern regex = Pattern.compile(pattern);
     Matcher matcher = regex.matcher(json);
     return matcher.matches();
+  }
+
+  public static boolean isValidJson2(String json) {
+    String regex = "\\A\\s*?(\\{.*\\}|\\[.*\\])\\s*?\\Z";
+    Pattern pattern = Pattern.compile(regex);
+    return pattern.matcher(json).matches();
   }
 }

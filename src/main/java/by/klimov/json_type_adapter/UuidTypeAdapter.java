@@ -2,7 +2,9 @@ package by.klimov.json_type_adapter;
 
 import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
+import by.klimov.util.Constant;
 import by.klimov.util.StringUtil;
+import java.util.Objects;
 import java.util.UUID;
 
 public class UuidTypeAdapter implements BaseTypeAdapter {
@@ -13,12 +15,16 @@ public class UuidTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public boolean isAssignable(String value) {
-    return isUuid(value);
+    String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
+    return Objects.isNull(extractedValue) ? isUuid(value) : isUuid(extractedValue) || isUuid(value);
   }
 
   @Override
   public UUID mapStringJsonToObject(String value) {
-    return UUID.fromString(StringUtil.removeQuotes(value));
+    String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
+    return Objects.isNull(extractedValue)
+        ? UUID.fromString(value)
+        : UUID.fromString(extractedValue);
   }
 
   @Override

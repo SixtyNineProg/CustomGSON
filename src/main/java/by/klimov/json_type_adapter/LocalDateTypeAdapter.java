@@ -19,16 +19,18 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public boolean isAssignable(String value) {
-    return TimeUtil.isLocalDate(StringUtil.extractString(value, Constant.STRING_REGEX))
-        || TimeUtil.isLocalDate(value);
+    String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
+    return Objects.isNull(extractedValue)
+        ? TimeUtil.isLocalDate(value)
+        : TimeUtil.isLocalDate(extractedValue) || TimeUtil.isLocalDate(value);
   }
 
   @Override
   public LocalDate mapStringJsonToObject(String value) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
     return Objects.isNull(extractedValue)
-            ? LocalDate.parse(value, Constant.LOCAL_DATE_FORMATTER)
-            : LocalDate.parse(extractedValue, Constant.LOCAL_DATE_FORMATTER);
+        ? LocalDate.parse(value, Constant.LOCAL_DATE_FORMATTER)
+        : LocalDate.parse(extractedValue, Constant.LOCAL_DATE_FORMATTER);
   }
 
   @Override

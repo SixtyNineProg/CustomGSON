@@ -208,7 +208,7 @@ class JsonServiceImplTest {
   @Test
   void mapJsonToObject_whenInputUuidString_thenUuidExpected() {
     // Given
-    String uuid = ProductTestData.builder().build().getUuid().toString();
+    String uuid = gson.toJson(ProductTestData.builder().build().getUuid());
     UUID expected = gson.fromJson(uuid, UUID.class);
 
     // When

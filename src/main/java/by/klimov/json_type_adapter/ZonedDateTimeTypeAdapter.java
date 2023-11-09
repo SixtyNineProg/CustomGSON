@@ -19,8 +19,10 @@ public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public boolean isAssignable(String value) {
-    return TimeUtil.isZonedDateTime(StringUtil.extractString(value, Constant.STRING_REGEX))
-        || TimeUtil.isZonedDateTime(value);
+    String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
+    return Objects.isNull(extractedValue)
+        ? TimeUtil.isZonedDateTime(value)
+        : TimeUtil.isZonedDateTime(extractedValue) || TimeUtil.isZonedDateTime(value);
   }
 
   @Override
