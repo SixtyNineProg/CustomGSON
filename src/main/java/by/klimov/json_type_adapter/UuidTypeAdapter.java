@@ -19,18 +19,27 @@ public class UuidTypeAdapter implements BaseTypeAdapter {
     return Objects.isNull(extractedValue) ? isUuid(value) : isUuid(extractedValue) || isUuid(value);
   }
 
+  @Override
+  public <T> boolean isAssignable(Class<T> tClass) {
+    return tClass.equals(UUID.class);
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public UUID mapStringJsonToObject(String value) {
+  public <T> T mapStringJsonToObject(String value, Class<T> tClass) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
-    return Objects.isNull(extractedValue)
-        ? UUID.fromString(value)
-        : UUID.fromString(extractedValue);
+    return (T)
+        (Objects.isNull(extractedValue) ? UUID.fromString(value) : UUID.fromString(extractedValue));
   }
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(DOUBLE_QUOTE + object.toString() + DOUBLE_QUOTE);
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return UUID.class;
   }
 
   private boolean isUuid(String string) {

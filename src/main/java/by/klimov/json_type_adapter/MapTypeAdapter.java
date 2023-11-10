@@ -5,8 +5,12 @@ import static by.klimov.util.StringLiteral.COMMA;
 import static by.klimov.util.StringLiteral.LEFT_BRACE;
 import static by.klimov.util.StringLiteral.RIGHT_BRACE;
 
+import by.klimov.exception.SerializationException;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import by.klimov.json_type_adapter.factory.impl.TypeAdapterFactoryImpl;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,9 +30,13 @@ public class MapTypeAdapter implements BaseTypeAdapter {
     return value.startsWith(LEFT_BRACE);
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public Map<String, Object> mapStringJsonToObject(String json) {
+  public <T> boolean isAssignable(Class<T> tClass) {
+    return tClass.equals(Map.class);
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
     TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
     Map<String, Object> map = new HashMap<>();
     Pattern pattern =
@@ -37,10 +45,11 @@ public class MapTypeAdapter implements BaseTypeAdapter {
     while (matcher.find()) {
       String key = matcher.group(1);
       String value = matcher.group(2);
-      BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value);
-      map.put(key, typeAdapter.mapStringJsonToObject(value));
+      Class<?> fieldClass = getFieldClassByName(key, tClass);
+      BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value, fieldClass);
+      map.put(key, typeAdapter.mapStringJsonToObject(value, typeAdapter.getClassType()));
     }
-    return map;
+    return buildObject(tClass, map);
   }
 
   @Override
@@ -68,5 +77,58 @@ public class MapTypeAdapter implements BaseTypeAdapter {
     }
     stringBuilder.append(RIGHT_BRACE);
     return stringBuilder;
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return Map.class;
+  }
+
+  @SuppressWarnings("java:S3011")
+  private <T> T buildObject(Class<T> tClass, Map<String, Object> map) {
+    T obj = getObject(tClass);
+    for (Field field : tClass.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (map.containsKey(field.getName())) {
+        setFiledValue(field, obj, map);
+      }
+    }
+    return obj;
+  }
+
+  @SuppressWarnings({"java:S3864", "java:S3011"})
+  private Class<?> getFieldClassByName(String key, Class<?> tClass) {
+    return Arrays.stream(tClass.getDeclaredFields())
+        .peek(field -> field.setAccessible(true))
+        .filter(field -> field.getName().equals(key))
+        .findFirst()
+        .orElseThrow()
+        .getType();
+  }
+
+  private <T> T getObject(Class<T> tClass) {
+    try {
+      return tClass.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException
+        | IllegalAccessException
+        | NoSuchMethodException
+        | InvocationTargetException e) {
+      throw new SerializationException(e);
+    }
+  }
+
+  @SuppressWarnings("java:S3011")
+  private <T> void setFiledValue(Field field, T obj, Map<String, Object> map) {
+    try {
+      field.set(obj, map.get(field.getName()));
+    } catch (IllegalAccessException e) {
+      throw new SerializationException(e);
+    }
+  }
+
+  private boolean isValidJson(String json) {
+    String regex = "\\A\\s*?(\\{.*\\}|\\[.*\\])\\s*?\\Z";
+    Pattern pattern = Pattern.compile(regex);
+    return pattern.matcher(json).matches();
   }
 }

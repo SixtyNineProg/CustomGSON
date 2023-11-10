@@ -25,13 +25,19 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
         : TimeUtil.isLocalDate(extractedValue) || TimeUtil.isLocalDate(value);
   }
 
+  @Override
+  public <T> boolean isAssignable(Class<T> tClass) {
+    return tClass.equals(LocalDate.class);
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public LocalDate mapStringJsonToObject(String value) {
+  public <T> T mapStringJsonToObject(String value, Class<T> tClass) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
-    return Objects.isNull(extractedValue)
-        ? LocalDate.parse(value, Constant.LOCAL_DATE_FORMATTER)
-        : LocalDate.parse(extractedValue, Constant.LOCAL_DATE_FORMATTER);
+    return (T)
+        (Objects.isNull(extractedValue)
+            ? LocalDate.parse(value, Constant.LOCAL_DATE_FORMATTER)
+            : LocalDate.parse(extractedValue, Constant.LOCAL_DATE_FORMATTER));
   }
 
   @Override
@@ -39,5 +45,10 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
     DateTimeFormatter formatters = DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT);
     LocalDate localDate = (LocalDate) object;
     return new StringBuilder(DOUBLE_QUOTE + localDate.format(formatters) + DOUBLE_QUOTE);
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return null;
   }
 }

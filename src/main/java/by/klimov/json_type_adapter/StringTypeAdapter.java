@@ -18,15 +18,25 @@ public class StringTypeAdapter implements BaseTypeAdapter {
     return value.startsWith("\"");
   }
 
+  @Override
+  public <T> boolean isAssignable(Class<T> tClass) {
+    return tClass.equals(String.class);
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public String mapStringJsonToObject(String value) {
+  public <T> T mapStringJsonToObject(String value, Class<T> tClass) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
-    return Objects.isNull(extractedValue) ? value : extractedValue;
+    return (T) (Objects.isNull(extractedValue) ? value : extractedValue);
   }
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(DOUBLE_QUOTE + object + DOUBLE_QUOTE);
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return String.class;
   }
 }

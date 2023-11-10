@@ -10,9 +10,15 @@ import by.klimov.exception.SerializationException;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import by.klimov.json_type_adapter.factory.impl.TypeAdapterFactoryImpl;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ObjectTypeAdapter implements BaseTypeAdapter {
 
@@ -29,8 +35,29 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String json) {
-    return null;
+  public <T> boolean isAssignable(Class<T> tClass) {
+    return tClass.equals(Object.class);
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
+    try {
+      BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(tClass);
+      return baseTypeAdapter.mapStringJsonToObject(json, tClass);
+    } catch (NoSuchElementException e) {
+      Map<String, Object> map = new HashMap<>();
+      Pattern pattern =
+              Pattern.compile("\"(.*?)\":\\s*(\".*?\"|\\d*[.]?\\d+|true|false|\\{.*?\\}|\\[.*?\\])");
+      Matcher matcher = pattern.matcher(json);
+      while (matcher.find()) {
+        String key = matcher.group(1);
+        String value = matcher.group(2);
+        Class<?> fieldClass = getFieldClassByName(key, tClass);
+        BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value, fieldClass);
+        map.put(key, typeAdapter.mapStringJsonToObject(value, typeAdapter.getClassType()));
+      }
+      return buildObject(tClass, map);
+    }
   }
 
   @SuppressWarnings("java:S3011")
@@ -56,6 +83,11 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
     return sb;
   }
 
+  @Override
+  public Class<?> getClassType() {
+    return Object.class;
+  }
+
   private <T> Object getFieldObject(T object, Field field) {
     Object fieldObject;
     try {
@@ -64,5 +96,47 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
       throw new SerializationException(e);
     }
     return fieldObject;
+  }
+
+  @SuppressWarnings("java:S3011")
+  private <T> T buildObject(Class<T> tClass, Map<String, Object> map) {
+    T obj = getObject(tClass);
+    for (Field field : tClass.getDeclaredFields()) {
+      field.setAccessible(true);
+      if (map.containsKey(field.getName())) {
+        setFiledValue(field, obj, map);
+      }
+    }
+    return obj;
+  }
+
+  @SuppressWarnings({"java:S3864", "java:S3011"})
+  private Class<?> getFieldClassByName(String key, Class<?> tClass) {
+    return Arrays.stream(tClass.getDeclaredFields())
+            .peek(field -> field.setAccessible(true))
+            .filter(field -> field.getName().equals(key))
+            .findFirst()
+            .orElseThrow()
+            .getType();
+  }
+
+  private <T> T getObject(Class<T> tClass) {
+    try {
+      return tClass.getDeclaredConstructor().newInstance();
+    } catch (InstantiationException
+             | IllegalAccessException
+             | NoSuchMethodException
+             | InvocationTargetException e) {
+      throw new SerializationException(e);
+    }
+  }
+
+  @SuppressWarnings("java:S3011")
+  private <T> void setFiledValue(Field field, T obj, Map<String, Object> map) {
+    try {
+      field.set(obj, map.get(field.getName()));
+    } catch (IllegalAccessException e) {
+      throw new SerializationException(e);
+    }
   }
 }

@@ -12,14 +12,24 @@ public class BooleanTypeAdapter implements BaseTypeAdapter {
     return value.equals(Boolean.TRUE.toString()) || value.equals(Boolean.FALSE.toString());
   }
 
+  @Override
+  public <T> boolean isAssignable(Class<T> tClass) {
+    return tClass.equals(Boolean.class);
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public Boolean mapStringJsonToObject(String value) {
-    return Boolean.valueOf(value);
+  public <T> T mapStringJsonToObject(String value, Class<T> tClass) {
+    return (T) Boolean.valueOf(value);
   }
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(object.toString());
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return Boolean.class;
   }
 }

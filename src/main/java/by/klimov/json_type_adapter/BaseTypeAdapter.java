@@ -6,7 +6,11 @@ public interface BaseTypeAdapter {
 
   boolean isAssignable(String value);
 
-  <T> T mapStringJsonToObject(String value);
+  <T> boolean isAssignable(Class<T> tClass);
+
+  <T> T mapStringJsonToObject(String value, Class<T> tClass);
 
   <T> StringBuilder mapObjectToStringJson(T object);
+
+  Class<?> getClassType();
 }

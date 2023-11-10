@@ -12,15 +12,25 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
     return isDouble(value);
   }
 
+  @Override
+  public <T> boolean isAssignable(Class<T> tClass) {
+    return tClass.equals(Double.class);
+  }
+
   @SuppressWarnings("unchecked")
   @Override
-  public Double mapStringJsonToObject(String value) {
-    return Double.parseDouble(value);
+  public <T> T mapStringJsonToObject(String value, Class<T> tClass) {
+    return (T) Double.valueOf(value);
   }
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(object.toString());
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return Double.class;
   }
 
   private boolean isDouble(String s) {

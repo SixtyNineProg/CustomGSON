@@ -6,5 +6,7 @@ public interface TypeAdapterFactory {
 
   <T> BaseTypeAdapter getTypeAdapter(T object);
 
-  BaseTypeAdapter getTypeAdapter(String value);
+  BaseTypeAdapter getTypeAdapter(String value, Class<?> tClass);
+
+  BaseTypeAdapter getTypeAdapter(Class<?> tClass);
 }
