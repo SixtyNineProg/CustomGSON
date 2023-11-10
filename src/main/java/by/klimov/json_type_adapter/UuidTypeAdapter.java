@@ -19,6 +19,7 @@ public class UuidTypeAdapter implements BaseTypeAdapter {
     return Objects.isNull(extractedValue) ? isUuid(value) : isUuid(extractedValue) || isUuid(value);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public UUID mapStringJsonToObject(String value) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);

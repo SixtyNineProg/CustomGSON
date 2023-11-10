@@ -12,6 +12,7 @@ public class BooleanTypeAdapter implements BaseTypeAdapter {
     return value.equals(Boolean.TRUE.toString()) || value.equals(Boolean.FALSE.toString());
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Boolean mapStringJsonToObject(String value) {
     return Boolean.valueOf(value);

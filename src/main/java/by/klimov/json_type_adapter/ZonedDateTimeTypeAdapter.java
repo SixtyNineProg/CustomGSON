@@ -25,6 +25,7 @@ public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
         : TimeUtil.isZonedDateTime(extractedValue) || TimeUtil.isZonedDateTime(value);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public ZonedDateTime mapStringJsonToObject(String value) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);

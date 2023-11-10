@@ -26,6 +26,7 @@ public class MapTypeAdapter implements BaseTypeAdapter {
     return value.startsWith(LEFT_BRACE);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Map<String, Object> mapStringJsonToObject(String json) {
     TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();

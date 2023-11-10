@@ -25,6 +25,7 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
         : TimeUtil.isLocalDate(extractedValue) || TimeUtil.isLocalDate(value);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public LocalDate mapStringJsonToObject(String value) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);

@@ -12,6 +12,7 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
     return isDouble(value);
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public Double mapStringJsonToObject(String value) {
     return Double.parseDouble(value);

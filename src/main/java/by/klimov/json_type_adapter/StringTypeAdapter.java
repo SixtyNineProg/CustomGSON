@@ -18,6 +18,7 @@ public class StringTypeAdapter implements BaseTypeAdapter {
     return value.startsWith("\"");
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public String mapStringJsonToObject(String value) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
