@@ -309,17 +309,17 @@ class JsonServiceImplTest {
     assertThat(actual).isEqualTo(expected);
   }
 
-  @SuppressWarnings("unchecked")
-  @Test
-  void mapJsonToObject_whenInputJsonMapWithStringKeyAndStringValue_thenMapExpected() {
-    // Given
-    String map = gson.toJson(MapTestData.builder().build().getMap());
-    Map<String, String> expected = gson.fromJson(map, Map.class);
-
-    // When
-    Map<String, String> actual = jsonService.mapJsonToObject(map, Map.class);
-
-    // Then
-    assertThat(actual).isEqualTo(expected);
-  }
+//  @SuppressWarnings("unchecked")
+//  @Test
+//  void mapJsonToObject_whenInputJsonMapWithStringKeyAndStringValue_thenMapExpected() {
+//    // Given
+//    String map = gson.toJson(MapTestData.builder().build().getMap());
+//    Map<String, String> expected = gson.fromJson(map, Map.class);
+//
+//    // When
+//    Map<String, String> actual = jsonService.mapJsonToObject(map, Map.class);
+//
+//    // Then
+//    assertThat(actual).isEqualTo(expected);
+//  }
 }

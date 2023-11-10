@@ -54,7 +54,7 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
         String value = matcher.group(2);
         Class<?> fieldClass = getFieldClassByName(key, tClass);
         BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value, fieldClass);
-        map.put(key, typeAdapter.mapStringJsonToObject(value, typeAdapter.getClassType()));
+        map.put(key, typeAdapter.mapStringJsonToObject(value, fieldClass));
       }
       return buildObject(tClass, map);
     }
@@ -81,11 +81,6 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
     }
     sb.append(RIGHT_BRACE);
     return sb;
-  }
-
-  @Override
-  public Class<?> getClassType() {
-    return Object.class;
   }
 
   private <T> Object getFieldObject(T object, Field field) {

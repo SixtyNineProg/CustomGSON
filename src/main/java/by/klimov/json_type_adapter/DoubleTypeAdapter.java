@@ -28,11 +28,6 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
     return new StringBuilder(object.toString());
   }
 
-  @Override
-  public Class<?> getClassType() {
-    return Double.class;
-  }
-
   private boolean isDouble(String s) {
     try {
       Double.parseDouble(s);

@@ -3,12 +3,14 @@ package by.klimov.json_type_adapter.factory.impl;
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
+import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
 import by.klimov.json_type_adapter.MapTypeAdapter;
 import by.klimov.json_type_adapter.NullTypeAdapter;
 import by.klimov.json_type_adapter.ObjectTypeAdapter;
 import by.klimov.json_type_adapter.StringTypeAdapter;
 import by.klimov.json_type_adapter.UuidTypeAdapter;
+import by.klimov.json_type_adapter.ZonedDateTimeTypeAdapter;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import java.util.List;
 import java.util.Objects;
@@ -22,8 +24,8 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
           new UuidTypeAdapter(),
           new StringTypeAdapter(),
           new LocalDateTypeAdapter(),
-          //            new ZonedDateTimeTypeAdapter(),
-          //            new ListTypeAdapter(),
+          new ZonedDateTimeTypeAdapter(),
+          new ListTypeAdapter(),
           new MapTypeAdapter());
 
   private final List<BaseTypeAdapter> valueTypeAdapters = List.of(new NullTypeAdapter());

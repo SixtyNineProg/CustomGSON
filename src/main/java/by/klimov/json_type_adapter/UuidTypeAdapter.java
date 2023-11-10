@@ -37,11 +37,6 @@ public class UuidTypeAdapter implements BaseTypeAdapter {
     return new StringBuilder(DOUBLE_QUOTE + object.toString() + DOUBLE_QUOTE);
   }
 
-  @Override
-  public Class<?> getClassType() {
-    return UUID.class;
-  }
-
   private boolean isUuid(String string) {
     try {
       UUID.fromString(StringUtil.removeQuotes(string));

@@ -27,9 +27,4 @@ public class BooleanTypeAdapter implements BaseTypeAdapter {
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(object.toString());
   }
-
-  @Override
-  public Class<?> getClassType() {
-    return Boolean.class;
-  }
 }

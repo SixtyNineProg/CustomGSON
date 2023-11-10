@@ -34,9 +34,4 @@ public class StringTypeAdapter implements BaseTypeAdapter {
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(DOUBLE_QUOTE + object + DOUBLE_QUOTE);
   }
-
-  @Override
-  public Class<?> getClassType() {
-    return String.class;
-  }
 }

@@ -30,9 +30,4 @@ public class NullTypeAdapter implements BaseTypeAdapter {
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(STRING_NULL);
   }
-
-  @Override
-  public Class<?> getClassType() {
-    return Object.class;
-  }
 }

@@ -1,33 +1,33 @@
 package by.klimov.json_type_adapter;
 
-import static by.klimov.util.Constant.LOCAL_DATE_FORMAT;
+import static by.klimov.util.Constant.ZONED_DATE_TIME_FORMAT;
 import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
 import by.klimov.util.Constant;
 import by.klimov.util.StringUtil;
 import by.klimov.util.TimeUtil;
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class LocalDateTypeAdapter implements BaseTypeAdapter {
+public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public <T> boolean isAssignable(T object) {
-    return object instanceof LocalDate;
+    return object instanceof ZonedDateTime;
   }
 
   @Override
   public boolean isAssignable(String value) {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
     return Objects.isNull(extractedValue)
-        ? TimeUtil.isLocalDate(value)
-        : TimeUtil.isLocalDate(extractedValue) || TimeUtil.isLocalDate(value);
+        ? TimeUtil.isZonedDateTime(value)
+        : TimeUtil.isZonedDateTime(extractedValue) || TimeUtil.isZonedDateTime(value);
   }
 
   @Override
   public <T> boolean isAssignable(Class<T> tClass) {
-    return tClass.equals(LocalDate.class);
+    return tClass.equals(ZonedDateTime.class);
   }
 
   @SuppressWarnings("unchecked")
@@ -36,14 +36,14 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
     String extractedValue = StringUtil.extractString(value, Constant.STRING_REGEX);
     return (T)
         (Objects.isNull(extractedValue)
-            ? LocalDate.parse(value, Constant.LOCAL_DATE_FORMATTER)
-            : LocalDate.parse(extractedValue, Constant.LOCAL_DATE_FORMATTER));
+            ? ZonedDateTime.parse(value, Constant.ZONED_DATE_TIME_FORMATTER)
+            : ZonedDateTime.parse(extractedValue, Constant.ZONED_DATE_TIME_FORMATTER));
   }
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
-    DateTimeFormatter formatters = DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT);
-    LocalDate localDate = (LocalDate) object;
-    return new StringBuilder(DOUBLE_QUOTE + localDate.format(formatters) + DOUBLE_QUOTE);
+    DateTimeFormatter formatters = DateTimeFormatter.ofPattern(ZONED_DATE_TIME_FORMAT);
+    ZonedDateTime zonedDateTime = (ZonedDateTime) object;
+    return new StringBuilder(DOUBLE_QUOTE + zonedDateTime.format(formatters) + DOUBLE_QUOTE);
   }
 }

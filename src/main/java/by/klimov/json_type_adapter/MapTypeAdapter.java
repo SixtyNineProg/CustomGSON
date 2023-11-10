@@ -47,7 +47,7 @@ public class MapTypeAdapter implements BaseTypeAdapter {
       String value = matcher.group(2);
       Class<?> fieldClass = getFieldClassByName(key, tClass);
       BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value, fieldClass);
-      map.put(key, typeAdapter.mapStringJsonToObject(value, typeAdapter.getClassType()));
+      map.put(key, typeAdapter.mapStringJsonToObject(value, fieldClass));
     }
     return buildObject(tClass, map);
   }
@@ -77,11 +77,6 @@ public class MapTypeAdapter implements BaseTypeAdapter {
     }
     stringBuilder.append(RIGHT_BRACE);
     return stringBuilder;
-  }
-
-  @Override
-  public Class<?> getClassType() {
-    return Map.class;
   }
 
   @SuppressWarnings("java:S3011")
