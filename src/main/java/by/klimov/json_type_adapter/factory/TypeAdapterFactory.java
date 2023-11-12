@@ -9,6 +9,8 @@ public interface TypeAdapterFactory {
 
   BaseTypeAdapter getTypeAdapter(String value, Class<?> tClass);
 
+  BaseTypeAdapter getTypeAdapter(String value);
+
   BaseTypeAdapter getTypeAdapter(Class<?> tClass);
 
   CollectionBaseTypeAdapter getCollectionTypeAdapter(Class<?> tClass);

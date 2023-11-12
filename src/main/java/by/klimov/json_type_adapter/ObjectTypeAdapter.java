@@ -18,11 +18,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 public class ObjectTypeAdapter implements BaseTypeAdapter {
-
-  private final TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
 
   @Override
   public <T> boolean isAssignable(T object) {
@@ -41,37 +38,34 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
 
   @Override
   public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
-    try {
-      BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(tClass);
-      return baseTypeAdapter.mapStringJsonToObject(json, tClass);
-    } catch (NoSuchElementException e) {
-      Map<String, Object> map = new HashMap<>();
-      Map<String, String> jsonData = JsonParser.parseJson(json);
-      for (Map.Entry<String, String> jsonObject : jsonData.entrySet()) {
-        String key = jsonObject.getKey();
-        String value = jsonObject.getValue();
-        Field field = ReflectionUtil.getField(key, tClass);
-        if (ReflectionUtil.isExistParameterizedGenericType(field)) {
-          Type fieldType = field.getGenericType();
-          ParameterizedType type = (ParameterizedType) fieldType;
-          List<Type> actualTypeArguments = List.of(type.getActualTypeArguments());
-          Class<?> rawTypeClass = ReflectionUtil.getClass(type.getRawType().getTypeName());
-          CollectionBaseTypeAdapter typeAdapter =
-              typeAdapterFactory.getCollectionTypeAdapter(rawTypeClass);
-          map.put(key, typeAdapter.mapStringJsonToObject(value, actualTypeArguments));
-        } else {
-          Class<?> fieldClass = field.getType();
-          BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value, fieldClass);
-          map.put(key, typeAdapter.mapStringJsonToObject(value, fieldClass));
-        }
+    TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
+    Map<String, Object> map = new HashMap<>();
+    Map<String, String> jsonData = JsonParser.parseJson(json);
+    for (Map.Entry<String, String> jsonObject : jsonData.entrySet()) {
+      String key = jsonObject.getKey();
+      String value = jsonObject.getValue();
+      Field field = ReflectionUtil.getField(key, tClass);
+      if (ReflectionUtil.isExistParameterizedGenericType(field)) {
+        Type fieldType = field.getGenericType();
+        ParameterizedType type = (ParameterizedType) fieldType;
+        List<Type> actualTypeArguments = List.of(type.getActualTypeArguments());
+        Class<?> rawTypeClass = ReflectionUtil.getClass(type.getRawType().getTypeName());
+        CollectionBaseTypeAdapter typeAdapter =
+            typeAdapterFactory.getCollectionTypeAdapter(rawTypeClass);
+        map.put(key, typeAdapter.mapStringJsonToObject(value, actualTypeArguments));
+      } else {
+        Class<?> fieldClass = field.getType();
+        BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(value, fieldClass);
+        map.put(key, typeAdapter.mapStringJsonToObject(value, fieldClass));
       }
-      return ReflectionUtil.buildObject(tClass, map);
     }
+    return ReflectionUtil.buildObject(tClass, map);
   }
 
   @SuppressWarnings("java:S3011")
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
+    TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
     StringBuilder sb = new StringBuilder(LEFT_BRACE);
     List<Field> fields = Arrays.stream(object.getClass().getDeclaredFields()).toList();
     for (Iterator<Field> iterator = fields.iterator(); iterator.hasNext(); ) {

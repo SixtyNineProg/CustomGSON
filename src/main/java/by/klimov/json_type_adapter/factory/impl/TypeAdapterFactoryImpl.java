@@ -40,6 +40,12 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
   }
 
   @Override
+  public BaseTypeAdapter getTypeAdapter(String value) {
+    BaseTypeAdapter nullTypeAdapter = new NullTypeAdapter();
+    return nullTypeAdapter.isAssignable(value) ? nullTypeAdapter : getBaseTypeAdapterByValue(value);
+  }
+
+  @Override
   public BaseTypeAdapter getTypeAdapter(Class<?> tClass) {
     return Objects.isNull(tClass) ? new NullTypeAdapter() : getBaseTypeAdapter(tClass);
   }
@@ -68,18 +74,20 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
     return typeAdapters.stream()
         .filter(typeAdapter -> typeAdapter.isAssignable(tClass))
         .findFirst()
-        .orElseThrow();
+        .orElse(new ObjectTypeAdapter());
   }
 
   private BaseTypeAdapter getBaseTypeAdapter(String value, Class<?> tClass) {
     return typeAdapters.stream()
-        .filter(typeAdapter -> typeAdapter.isAssignable(tClass))
+        .filter(typeAdapter -> typeAdapter.isAssignable(value) && typeAdapter.isAssignable(tClass))
         .findFirst()
-        .orElseGet(() -> getBaseTypeAdapter(value));
+        .orElse(new ObjectTypeAdapter());
   }
 
-  private BaseTypeAdapter getBaseTypeAdapter(String value) {
-    BaseTypeAdapter nullTypeAdapter = new NullTypeAdapter();
-    return nullTypeAdapter.isAssignable(value) ? nullTypeAdapter : new ObjectTypeAdapter();
+  private BaseTypeAdapter getBaseTypeAdapterByValue(String value) {
+    return typeAdapters.stream()
+        .filter(typeAdapter -> typeAdapter.isAssignable(value))
+        .findFirst()
+        .orElse(new ObjectTypeAdapter());
   }
 }

@@ -78,7 +78,7 @@ class JsonServiceImplTest {
   }
 
   @Test
-  void mapJsonToObject_whenInputJsonOrder_thenOrderExpected() throws JSONException {
+  void mapJsonToObject_whenInputJsonOrder_thenOrderExpected() {
     // Given
     String order = gson.toJson(OrderTestData.builder().build().buildOrder());
     Order expected = gson.fromJson(order, Order.class);
@@ -88,9 +88,9 @@ class JsonServiceImplTest {
 
     // Then
     assertThat(actual)
-            .hasFieldOrPropertyWithValue(Order.Fields.id, expected.getId())
-            .hasFieldOrPropertyWithValue(Order.Fields.createDate, expected.getCreateDate())
-            .hasFieldOrPropertyWithValue(Order.Fields.products, expected.getProducts());
+        .hasFieldOrPropertyWithValue(Order.Fields.id, expected.getId())
+        .hasFieldOrPropertyWithValue(Order.Fields.createDate, expected.getCreateDate())
+        .hasFieldOrPropertyWithValue(Order.Fields.products, expected.getProducts());
   }
 
   @Test
@@ -146,7 +146,7 @@ class JsonServiceImplTest {
   @Test
   void mapJsonToObject_whenInputString_thenStringExpected() {
     // Given
-    String name = ProductTestData.builder().build().getName();
+    String name = gson.toJson(ProductTestData.builder().build().getName());
     String expected = gson.fromJson(name, String.class);
 
     // When
@@ -326,6 +326,33 @@ class JsonServiceImplTest {
     assertThat(actual).isEqualTo(expected);
   }
 
+  @Test
+  void mapObjectToJson_whenInputMapWithStringKeyAndStringValue_thenStringFromMapExpected() {
+    // Given
+    Map<String, String> map = MapTestData.builder().build().getMap();
+    String expected = gson.toJson(map);
+
+    // When
+    String actual = jsonService.mapObjectToJson(map);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @SuppressWarnings("unchecked")
+  @Test
+  void mapJsonToObject_whenInputJsonMapWithStringKeyAndStringValue_thenMapExpected() {
+    // Given
+    String map = gson.toJson(MapTestData.builder().build().getMap());
+    Map<String, String> expected = gson.fromJson(map, Map.class);
+
+    // When
+    Map<String, String> actual = jsonService.mapJsonToObject(map, Map.class);
+
+    // Then
+    assertThat(actual).isEqualTo(expected);
+  }
+
   @SuppressWarnings("unchecked")
   @Test
   void mapJsonToObject_whenJsonOrdersList_thenOrdersListExpected() {
@@ -340,30 +367,17 @@ class JsonServiceImplTest {
     assertThat(actual).isEqualTo(expected);
   }
 
+  @SuppressWarnings("unchecked")
   @Test
-  void mapObjectToJson_whenInputMapWithStringKeyAndStringValue_thenStringFromMapExpected() {
+  void mapJsonToObject_whenJsonProductsList_thenProductsListExpected() {
     // Given
-    Map<String, String> map = MapTestData.builder().build().getMap();
-    String expected = gson.toJson(map);
+    String products = gson.toJson(ProductTestData.builder().build().buildProducts());
+    List<Product> expected = gson.fromJson(products, List.class);
 
     // When
-    String actual = jsonService.mapObjectToJson(map);
+    List<Product> actual = jsonService.mapJsonToObject(products, List.class);
 
     // Then
     assertThat(actual).isEqualTo(expected);
   }
-
-  //  @SuppressWarnings("unchecked")
-  //  @Test
-  //  void mapJsonToObject_whenInputJsonMapWithStringKeyAndStringValue_thenMapExpected() {
-  //    // Given
-  //    String map = gson.toJson(MapTestData.builder().build().getMap());
-  //    Map<String, String> expected = gson.fromJson(map, Map.class);
-  //
-  //    // When
-  //    Map<String, String> actual = jsonService.mapJsonToObject(map, Map.class);
-  //
-  //    // Then
-  //    assertThat(actual).isEqualTo(expected);
-  //  }
 }

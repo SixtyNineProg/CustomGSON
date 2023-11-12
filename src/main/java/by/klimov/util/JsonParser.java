@@ -63,7 +63,7 @@ public class JsonParser {
     String value;
     int bracketCounter = 0;
     int braceCounter = 0;
-    int keyStart = json.indexOf("\"");
+    int keyStart = 0;
     for (int i = keyStart; i < json.length(); i++) {
       char c = json.charAt(i);
       braceCounter = c == '{' ? braceCounter + 1 : braceCounter;
@@ -71,7 +71,7 @@ public class JsonParser {
       bracketCounter = c == '[' ? bracketCounter + 1 : bracketCounter;
       bracketCounter = c == ']' ? bracketCounter - 1 : bracketCounter;
       if (bracketCounter == 0 && braceCounter == 0) {
-        if (isEndValue(json, c, i)) {
+        if (isEndValueList(c)) {
           value = json.substring(keyStart, i).trim();
           keyStart = i + 1;
           list.add(value);
@@ -94,7 +94,11 @@ public class JsonParser {
   }
 
   private static boolean isEndValue(String json, char c, int i) {
-    return (c == ',' && ((i + 2) < json.length() && (json.charAt(i + 1) == '\"')));
+    return c == ',' && ((i + 2) < json.length() && (json.charAt(i + 1) == '\"'));
+  }
+
+  private static boolean isEndValueList(char c) {
+    return c == ',';
   }
 
   private static boolean isEndKey(String json, char c, int i) {
