@@ -2,6 +2,7 @@ package by.klimov.json_type_adapter.factory.impl;
 
 import by.klimov.json_type_adapter.BaseTypeAdapter;
 import by.klimov.json_type_adapter.BooleanTypeAdapter;
+import by.klimov.json_type_adapter.CollectionBaseTypeAdapter;
 import by.klimov.json_type_adapter.DoubleTypeAdapter;
 import by.klimov.json_type_adapter.ListTypeAdapter;
 import by.klimov.json_type_adapter.LocalDateTypeAdapter;
@@ -28,7 +29,8 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
           new ListTypeAdapter(),
           new MapTypeAdapter());
 
-  private final List<BaseTypeAdapter> valueTypeAdapters = List.of(new NullTypeAdapter());
+  private final List<CollectionBaseTypeAdapter> collectionBaseTypeAdapters =
+      List.of(new ListTypeAdapter());
 
   @Override
   public BaseTypeAdapter getTypeAdapter(String value, Class<?> tClass) {
@@ -40,6 +42,14 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
   @Override
   public BaseTypeAdapter getTypeAdapter(Class<?> tClass) {
     return Objects.isNull(tClass) ? new NullTypeAdapter() : getBaseTypeAdapter(tClass);
+  }
+
+  @Override
+  public CollectionBaseTypeAdapter getCollectionTypeAdapter(Class<?> tClass) {
+    return collectionBaseTypeAdapters.stream()
+            .filter(typeAdapter -> typeAdapter.isAssignable(tClass))
+            .findFirst()
+            .orElseThrow();
   }
 
   @Override

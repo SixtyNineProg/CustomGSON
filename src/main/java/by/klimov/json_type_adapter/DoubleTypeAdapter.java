@@ -1,5 +1,7 @@
 package by.klimov.json_type_adapter;
 
+import java.lang.reflect.Field;
+
 public class DoubleTypeAdapter implements BaseTypeAdapter {
 
   @Override
@@ -21,6 +23,11 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
   @Override
   public <T> T mapStringJsonToObject(String value, Class<T> tClass) {
     return (T) Double.valueOf(value);
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String value, Field field) {
+    return null;
   }
 
   @Override

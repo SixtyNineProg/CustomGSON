@@ -6,6 +6,8 @@ import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 import by.klimov.util.Constant;
 import by.klimov.util.StringUtil;
 import by.klimov.util.TimeUtil;
+
+import java.lang.reflect.Field;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
@@ -38,6 +40,11 @@ public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
         (Objects.isNull(extractedValue)
             ? ZonedDateTime.parse(value, Constant.ZONED_DATE_TIME_FORMATTER)
             : ZonedDateTime.parse(extractedValue, Constant.ZONED_DATE_TIME_FORMATTER));
+  }
+
+  @Override
+  public <T> T mapStringJsonToObject(String value, Field field) {
+    return null;
   }
 
   @Override

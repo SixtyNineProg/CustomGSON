@@ -14,7 +14,7 @@ public class ProductTestData {
 
   @Builder.Default private UUID uuid = UUID.fromString("097ceff8-27a8-4b31-a019-5069ea80ab5b");
 
-  @Builder.Default private String name = "laptop";
+  @Builder.Default private String name = ",laptop";
 
   @Builder.Default private Double price = 10000.0;
 

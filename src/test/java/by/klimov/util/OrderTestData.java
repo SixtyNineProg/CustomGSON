@@ -4,6 +4,7 @@ import by.klimov.dto.Order;
 import by.klimov.dto.Product;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
@@ -18,12 +19,15 @@ public class OrderTestData {
   @Builder.Default
   private List<Product> products = ProductTestData.builder().build().buildProducts();
 
-  @Builder.Default
-  private LocalDate createDate =
-          LocalDate.of(2020, Month.JANUARY, 8);
+  @Builder.Default private LocalDate createDate = LocalDate.of(2020, Month.JANUARY, 8);
 
   public Order buildOrder() {
     return Order.builder()
+        .productss(
+            List.of(
+                Collections.singletonList(ProductTestData.builder().build().buildProducts()),
+                Collections.singletonList(ProductTestData.builder().build().buildProducts()),
+                Collections.singletonList(ProductTestData.builder().build().buildProducts())))
         .id(id)
         .products(ProductTestData.builder().build().buildProducts())
         .createDate(createDate)

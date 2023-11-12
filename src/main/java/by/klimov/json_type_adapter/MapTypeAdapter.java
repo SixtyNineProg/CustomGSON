@@ -53,6 +53,11 @@ public class MapTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
+  public <T> T mapStringJsonToObject(String value, Field field) {
+    return null;
+  }
+
+  @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     Map<?, ?> map = (Map<?, ?>) object;
     StringBuilder stringBuilder = new StringBuilder(LEFT_BRACE);
