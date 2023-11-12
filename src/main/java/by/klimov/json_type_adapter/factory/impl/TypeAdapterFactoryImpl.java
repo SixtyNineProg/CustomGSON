@@ -47,9 +47,9 @@ public class TypeAdapterFactoryImpl implements TypeAdapterFactory {
   @Override
   public CollectionBaseTypeAdapter getCollectionTypeAdapter(Class<?> tClass) {
     return collectionBaseTypeAdapters.stream()
-            .filter(typeAdapter -> typeAdapter.isAssignable(tClass))
-            .findFirst()
-            .orElseThrow();
+        .filter(typeAdapter -> typeAdapter.isAssignable(tClass))
+        .findFirst()
+        .orElseThrow();
   }
 
   @Override

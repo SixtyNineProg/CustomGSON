@@ -1,7 +1,5 @@
 package by.klimov.json_type_adapter;
 
-import java.lang.reflect.Field;
-
 public class BooleanTypeAdapter implements BaseTypeAdapter {
 
   @Override
@@ -28,5 +26,10 @@ public class BooleanTypeAdapter implements BaseTypeAdapter {
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(object.toString());
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return Boolean.class;
   }
 }

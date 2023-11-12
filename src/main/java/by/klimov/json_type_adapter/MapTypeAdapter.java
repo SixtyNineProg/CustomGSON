@@ -79,6 +79,11 @@ public class MapTypeAdapter implements BaseTypeAdapter {
     return stringBuilder;
   }
 
+  @Override
+  public Class<?> getClassType() {
+    return Map.class;
+  }
+
   @SuppressWarnings("java:S3011")
   private <T> T buildObject(Class<T> tClass, Map<String, Object> map) {
     T obj = getObject(tClass);
@@ -119,11 +124,5 @@ public class MapTypeAdapter implements BaseTypeAdapter {
     } catch (IllegalAccessException e) {
       throw new SerializationException(e);
     }
-  }
-
-  private boolean isValidJson(String json) {
-    String regex = "\\A\\s*?(\\{.*\\}|\\[.*\\])\\s*?\\Z";
-    Pattern pattern = Pattern.compile(regex);
-    return pattern.matcher(json).matches();
   }
 }

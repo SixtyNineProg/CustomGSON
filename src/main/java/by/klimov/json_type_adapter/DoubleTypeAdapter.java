@@ -1,7 +1,5 @@
 package by.klimov.json_type_adapter;
 
-import java.lang.reflect.Field;
-
 public class DoubleTypeAdapter implements BaseTypeAdapter {
 
   @Override
@@ -28,6 +26,11 @@ public class DoubleTypeAdapter implements BaseTypeAdapter {
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(object.toString());
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return Double.class;
   }
 
   private boolean isDouble(String s) {

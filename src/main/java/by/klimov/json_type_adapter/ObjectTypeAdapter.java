@@ -4,21 +4,16 @@ import static by.klimov.util.StringLiteral.COLON;
 import static by.klimov.util.StringLiteral.COMMA;
 import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 import static by.klimov.util.StringLiteral.LEFT_BRACE;
-import static by.klimov.util.StringLiteral.LEFT_BRACKET;
 import static by.klimov.util.StringLiteral.RIGHT_BRACE;
-import static by.klimov.util.StringLiteral.RIGHT_BRACKET;
 
-import by.klimov.exception.SerializationException;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import by.klimov.json_type_adapter.factory.impl.TypeAdapterFactoryImpl;
 import by.klimov.util.JsonParser;
-
+import by.klimov.util.ReflectionUtil;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -55,12 +50,12 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
       for (Map.Entry<String, String> jsonObject : jsonData.entrySet()) {
         String key = jsonObject.getKey();
         String value = jsonObject.getValue();
-        Field field = getField(key, tClass);
-        if (isExistParameterizedGenericType(field)) {
+        Field field = ReflectionUtil.getField(key, tClass);
+        if (ReflectionUtil.isExistParameterizedGenericType(field)) {
           Type fieldType = field.getGenericType();
           ParameterizedType type = (ParameterizedType) fieldType;
           List<Type> actualTypeArguments = List.of(type.getActualTypeArguments());
-          Class<?> rawTypeClass = getClass(type.getRawType().getTypeName());
+          Class<?> rawTypeClass = ReflectionUtil.getClass(type.getRawType().getTypeName());
           CollectionBaseTypeAdapter typeAdapter =
               typeAdapterFactory.getCollectionTypeAdapter(rawTypeClass);
           map.put(key, typeAdapter.mapStringJsonToObject(value, actualTypeArguments));
@@ -70,7 +65,7 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
           map.put(key, typeAdapter.mapStringJsonToObject(value, fieldClass));
         }
       }
-      return buildObject(tClass, map);
+      return ReflectionUtil.buildObject(tClass, map);
     }
   }
 
@@ -82,7 +77,7 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
     for (Iterator<Field> iterator = fields.iterator(); iterator.hasNext(); ) {
       Field field = iterator.next();
       field.setAccessible(true);
-      Object fieldObject = getFieldObject(object, field);
+      Object fieldObject = ReflectionUtil.getFieldObject(object, field);
       BaseTypeAdapter baseTypeAdapter = typeAdapterFactory.getTypeAdapter(fieldObject);
       sb.append(DOUBLE_QUOTE)
           .append(field.getName())
@@ -97,83 +92,8 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
     return sb;
   }
 
-  private Class<?> getClass(String className) {
-    try {
-      return Class.forName(className);
-    } catch (ClassNotFoundException e) {
-      throw new SerializationException(e);
-    }
-  }
-
-  private List<Type> getParameterizedTypes(Field field) {
-    Type fieldType = field.getGenericType();
-    return fieldType instanceof ParameterizedType parameterizedType
-        ? List.of(parameterizedType.getActualTypeArguments())
-        : Collections.emptyList();
-  }
-
-  private <T> Object getFieldObject(T object, Field field) {
-    Object fieldObject;
-    try {
-      fieldObject = field.get(object);
-    } catch (IllegalAccessException e) {
-      throw new SerializationException(e);
-    }
-    return fieldObject;
-  }
-
-  @SuppressWarnings("java:S3011")
-  private <T> T buildObject(Class<T> tClass, Map<String, Object> map) {
-    T obj = getObject(tClass);
-    for (Field field : tClass.getDeclaredFields()) {
-      field.setAccessible(true);
-      if (map.containsKey(field.getName())) {
-        setFiledValue(field, obj, map);
-      }
-    }
-    return obj;
-  }
-
-  @SuppressWarnings({"java:S3864", "java:S3011"})
-  private Field getField(String key, Class<?> tClass) {
-    return Arrays.stream(tClass.getDeclaredFields())
-        .peek(field -> field.setAccessible(true))
-        .filter(field -> field.getName().equals(key))
-        .findFirst()
-        .orElseThrow();
-  }
-
-  @SuppressWarnings({"java:S3864", "java:S3011"})
-  private Class<?> getFieldClass(String key, Class<?> tClass) {
-    try {
-      return getField(key, tClass).getType();
-    } catch (NoSuchElementException e) {
-      return Object.class;
-    }
-  }
-
-  private <T> T getObject(Class<T> tClass) {
-    try {
-      return tClass.getDeclaredConstructor().newInstance();
-    } catch (InstantiationException
-        | IllegalAccessException
-        | NoSuchMethodException
-        | InvocationTargetException e) {
-      throw new SerializationException(e);
-    }
-  }
-
-  @SuppressWarnings("java:S3011")
-  private <T> void setFiledValue(Field field, T obj, Map<String, Object> map) {
-    try {
-      field.set(obj, map.get(field.getName()));
-    } catch (IllegalAccessException e) {
-      throw new SerializationException(e);
-    }
-  }
-
-  private boolean isExistParameterizedGenericType(Field field) {
-    Type fieldType = field.getGenericType();
-    return fieldType instanceof ParameterizedType;
+  @Override
+  public Class<?> getClassType() {
+    return Object.class;
   }
 }

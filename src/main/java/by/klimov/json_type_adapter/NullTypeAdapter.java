@@ -1,6 +1,5 @@
 package by.klimov.json_type_adapter;
 
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 public class NullTypeAdapter implements BaseTypeAdapter {
@@ -30,5 +29,10 @@ public class NullTypeAdapter implements BaseTypeAdapter {
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(STRING_NULL);
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return null;
   }
 }

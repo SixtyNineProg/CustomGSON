@@ -7,8 +7,8 @@ import static by.klimov.util.StringLiteral.RIGHT_BRACKET;
 import by.klimov.exception.SerializationException;
 import by.klimov.json_type_adapter.factory.TypeAdapterFactory;
 import by.klimov.json_type_adapter.factory.impl.TypeAdapterFactoryImpl;
+import by.klimov.util.JsonParser;
 import by.klimov.util.StringLiteral;
-import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -41,13 +40,11 @@ public class ListTypeAdapter implements BaseTypeAdapter, CollectionBaseTypeAdapt
   @Override
   public <T> T mapStringJsonToObject(String json, Class<T> tClass) {
     TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
-    Pattern pattern = Pattern.compile("\\{(?:[^{}]|\\{(?:[^{}]|\\{[^{}]*\\})*\\})*\\}");
-    Matcher matcher = pattern.matcher(json);
+    List<String> jsonList = JsonParser.parseJsonList(json);
     List<Object> list = new ArrayList<>();
-    while (matcher.find()) {
-      String element = matcher.group();
-      BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(element, Object.class);
-      list.add(typeAdapter.mapStringJsonToObject(element, Object.class));
+    for (String element : jsonList) {
+      BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(element);
+      list.add(typeAdapter.mapStringJsonToObject(element, typeAdapter.getClassType()));
     }
     return (T) list;
   }
@@ -70,6 +67,11 @@ public class ListTypeAdapter implements BaseTypeAdapter, CollectionBaseTypeAdapt
     return stringBuilder;
   }
 
+  @Override
+  public Class<?> getClassType() {
+    return List.class;
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public <T> T mapStringJsonToObject(String value, List<Type> actualTypeArguments) {
@@ -81,7 +83,7 @@ public class ListTypeAdapter implements BaseTypeAdapter, CollectionBaseTypeAdapt
       String element = matcher.group();
       Class<?> rawTypeClass;
       List<Type> typeArguments = Collections.emptyList();
-      try{
+      try {
         ParameterizedType type = (ParameterizedType) actualTypeArguments.get(0);
         typeArguments = List.of(type.getActualTypeArguments());
         rawTypeClass = getClass(type.getRawType().getTypeName());
@@ -92,7 +94,8 @@ public class ListTypeAdapter implements BaseTypeAdapter, CollectionBaseTypeAdapt
         BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(element, rawTypeClass);
         list.add(typeAdapter.mapStringJsonToObject(element, rawTypeClass));
       } else {
-        CollectionBaseTypeAdapter typeAdapter = typeAdapterFactory.getCollectionTypeAdapter(rawTypeClass);
+        CollectionBaseTypeAdapter typeAdapter =
+            typeAdapterFactory.getCollectionTypeAdapter(rawTypeClass);
         list.add(typeAdapter.mapStringJsonToObject(element, typeArguments));
       }
     }

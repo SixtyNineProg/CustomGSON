@@ -4,8 +4,6 @@ import static by.klimov.util.StringLiteral.DOUBLE_QUOTE;
 
 import by.klimov.util.Constant;
 import by.klimov.util.StringUtil;
-
-import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -37,6 +35,11 @@ public class UuidTypeAdapter implements BaseTypeAdapter {
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(DOUBLE_QUOTE + object.toString() + DOUBLE_QUOTE);
+  }
+
+  @Override
+  public Class<?> getClassType() {
+    return UUID.class;
   }
 
   private boolean isUuid(String string) {

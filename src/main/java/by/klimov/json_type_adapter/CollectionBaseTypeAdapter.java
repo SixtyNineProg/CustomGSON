@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface CollectionBaseTypeAdapter {
 
-    <T> T mapStringJsonToObject(String value, List<Type> actualTypeArguments);
-    <T> boolean isAssignable(Class<T> tClass);
+  <T> T mapStringJsonToObject(String value, List<Type> actualTypeArguments);
+
+  <T> boolean isAssignable(Class<T> tClass);
 }
