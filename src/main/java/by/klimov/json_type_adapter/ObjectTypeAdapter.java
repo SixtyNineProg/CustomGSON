@@ -57,8 +57,8 @@ public class ObjectTypeAdapter implements BaseTypeAdapter {
         String value = jsonObject.getValue();
         Field field = getField(key, tClass);
         if (isExistParameterizedGenericType(field)) {
-          List<Type> types = getParameterizedTypes(field);
-          ParameterizedType type = (ParameterizedType) types.get(0);
+          Type fieldType = field.getGenericType();
+          ParameterizedType type = (ParameterizedType) fieldType;
           List<Type> actualTypeArguments = List.of(type.getActualTypeArguments());
           Class<?> rawTypeClass = getClass(type.getRawType().getTypeName());
           CollectionBaseTypeAdapter typeAdapter =

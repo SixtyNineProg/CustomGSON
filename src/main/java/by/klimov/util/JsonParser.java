@@ -37,16 +37,16 @@ public class JsonParser {
                 braceCounter = c == '{' ? braceCounter + 1: braceCounter;
                 braceCounter = c == '}' ? braceCounter - 1: braceCounter;
                 bracketCounter = c == '[' ? bracketCounter + 1: bracketCounter;
-                bracketCounter = c == ']' ? bracketCounter + 1: bracketCounter;
+                bracketCounter = c == ']' ? bracketCounter - 1: bracketCounter;
                 if (bracketCounter == 0 && braceCounter == 0) {
                     if (isEndValue(json, c, i)) {
                         isKey = true;
-                        value = json.substring(keyStart, i).replace("\"", "").trim();
+                        value = json.substring(keyStart, i).trim();
                         keyStart = i + 2;
                         map.put(key, value);
                     }
                     if (isEndJson(json, i)) {
-                        value = json.substring(keyStart).replace("\"", "").trim();
+                        value = json.substring(keyStart).trim();
                         map.put(key, value);
                     }
                 }

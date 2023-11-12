@@ -43,43 +43,13 @@ public class ListTypeAdapter implements BaseTypeAdapter, CollectionBaseTypeAdapt
     TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
     Pattern pattern = Pattern.compile("\\{(?:[^{}]|\\{(?:[^{}]|\\{[^{}]*\\})*\\})*\\}");
     Matcher matcher = pattern.matcher(json);
-    List list = new ArrayList<>();
+    List<Object> list = new ArrayList<>();
     while (matcher.find()) {
       String element = matcher.group();
-      Type type = (Type) tClass;
       BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(element, Object.class);
       list.add(typeAdapter.mapStringJsonToObject(element, Object.class));
     }
     return (T) list;
-  }
-
-  private Class<?> getParameterizedClass(Field field) {
-    String className = getParameterizedClassName(field);
-    try {
-      return Class.forName(className);
-    } catch (ClassNotFoundException e) {
-      throw new SerializationException(e);
-    }
-  }
-
-  private String getParameterizedClassName(Field field) {
-    return getParameterizedType(field)
-        .orElseThrow(() -> new SerializationException("Parameterized class not found"))
-        .getTypeName();
-  }
-
-  private List<Type> getParameterizedTypes(Field field) {
-    Type fieldType = field.getGenericType();
-    return fieldType instanceof ParameterizedType parameterizedType
-        ? List.of(parameterizedType.getActualTypeArguments())
-        : Collections.emptyList();
-  }
-
-  private Optional<Type> getParameterizedType(Field field) {
-    Type fieldType = field.getGenericType();
-    return fieldType instanceof ParameterizedType parameterizedType
-        ? Optional.of(parameterizedType.getActualTypeArguments()[0])
-        : Optional.empty();
   }
 
   @SuppressWarnings("unchecked")
@@ -100,17 +70,24 @@ public class ListTypeAdapter implements BaseTypeAdapter, CollectionBaseTypeAdapt
     return stringBuilder;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public <T> T mapStringJsonToObject(String value, List<Type> actualTypeArguments) {
     TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
     Pattern pattern = Pattern.compile("\\{(?:[^{}]|\\{(?:[^{}]|\\{[^{}]*\\})*\\})*\\}");
     Matcher matcher = pattern.matcher(value);
-    List list = new ArrayList<>();
+    List<Object> list = new ArrayList<>();
     while (matcher.find()) {
       String element = matcher.group();
-      ParameterizedType type = (ParameterizedType) actualTypeArguments.get(0);
-      List<Type> typeArguments = List.of(type.getActualTypeArguments());
-      Class<?> rawTypeClass = getClass(type.getRawType().getTypeName());
+      Class<?> rawTypeClass;
+      List<Type> typeArguments = Collections.emptyList();
+      try{
+        ParameterizedType type = (ParameterizedType) actualTypeArguments.get(0);
+        typeArguments = List.of(type.getActualTypeArguments());
+        rawTypeClass = getClass(type.getRawType().getTypeName());
+      } catch (ClassCastException e) {
+        rawTypeClass = getClass(actualTypeArguments.get(0).getTypeName());
+      }
       if (typeArguments.isEmpty()) {
         BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(element, rawTypeClass);
         list.add(typeAdapter.mapStringJsonToObject(element, rawTypeClass));
