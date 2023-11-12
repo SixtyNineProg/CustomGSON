@@ -35,23 +35,6 @@ class JsonServiceImplTest {
   private final JsonServiceImpl jsonService = new JsonServiceImpl();
 
   @Test
-  void mapJsonToObject_whenJsonStringToProduct_thenProductExpected() {
-    // Given
-    Product expected = ProductTestData.builder().build().buildProduct();
-    String json = gson.toJson(expected);
-
-    // When
-    Product actual = jsonService.mapJsonToObject(json, Product.class);
-
-    // Then
-    assertThat(actual)
-        .hasFieldOrPropertyWithValue(Product.Fields.name, expected.getName())
-        .hasFieldOrPropertyWithValue(Product.Fields.id, expected.getId())
-        .hasFieldOrPropertyWithValue(Product.Fields.isEnable, expected.getIsEnable())
-        .hasFieldOrPropertyWithValue(Product.Fields.price, expected.getPrice());
-  }
-
-  @Test
   void mapObjectToJson_whenProductToJson_thenValidJsonExpected() throws JSONException {
     // Given
     Product product = ProductTestData.builder().build().buildProduct();
@@ -62,6 +45,23 @@ class JsonServiceImplTest {
 
     // Then
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
+  }
+
+  @Test
+  void mapJsonToObject_whenJsonStringToProduct_thenProductExpected() {
+    // Given
+    Product expected = ProductTestData.builder().build().buildProduct();
+    String json = gson.toJson(expected);
+
+    // When
+    Product actual = jsonService.mapJsonToObject(json, Product.class);
+
+    // Then
+    assertThat(actual)
+            .hasFieldOrPropertyWithValue(Product.Fields.name, expected.getName())
+            .hasFieldOrPropertyWithValue(Product.Fields.id, expected.getId())
+            .hasFieldOrPropertyWithValue(Product.Fields.isEnable, expected.getIsEnable())
+            .hasFieldOrPropertyWithValue(Product.Fields.price, expected.getPrice());
   }
 
   @Test
@@ -104,6 +104,24 @@ class JsonServiceImplTest {
 
     // Then
     JSONAssert.assertEquals(expected, actual, JSONCompareMode.STRICT);
+  }
+
+  @Test
+  void mapJsonToObject_whenInputJsonCustomer_thenCustomerExpected() {
+    // Given
+    String customer = gson.toJson(CustomerTestData.builder().build().buildCustomer());
+    Customer expected = gson.fromJson(customer, Customer.class);
+
+    // When
+    Customer actual = jsonService.mapJsonToObject(customer, Customer.class);
+
+    // Then
+    assertThat(actual)
+        .hasFieldOrPropertyWithValue(Customer.Fields.id, expected.getId())
+        .hasFieldOrPropertyWithValue(Customer.Fields.firstName, expected.getFirstName())
+        .hasFieldOrPropertyWithValue(Customer.Fields.lastName, expected.getLastName())
+        .hasFieldOrPropertyWithValue(Customer.Fields.dateBirth, expected.getDateBirth())
+        .hasFieldOrPropertyWithValue(Customer.Fields.orders, expected.getOrders());
   }
 
   @Test
@@ -353,6 +371,7 @@ class JsonServiceImplTest {
     assertThat(actual).isEqualTo(expected);
   }
 
+  // TODO in v2.0
   @SuppressWarnings("unchecked")
   @Test
   void mapJsonToObject_whenJsonOrdersList_thenOrdersListExpected() {
@@ -367,6 +386,7 @@ class JsonServiceImplTest {
     assertThat(actual).isEqualTo(expected);
   }
 
+  // TODO in v2.0
   @SuppressWarnings("unchecked")
   @Test
   void mapJsonToObject_whenJsonProductsList_thenProductsListExpected() {
