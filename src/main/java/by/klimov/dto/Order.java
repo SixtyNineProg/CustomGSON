@@ -17,7 +17,6 @@ import lombok.experimental.FieldNameConstants;
 @AllArgsConstructor
 public class Order {
 
-  private List<List<List<Product>>> productss;
   private UUID id;
   private List<Product> products;
   private LocalDate createDate;

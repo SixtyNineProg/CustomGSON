@@ -53,24 +53,6 @@ public class ListTypeAdapter implements BaseTypeAdapter, CollectionBaseTypeAdapt
     return (T) list;
   }
 
-  @Override
-  public <T> T mapStringJsonToObject(String value, Field field) {
-    TypeAdapterFactory typeAdapterFactory = new TypeAdapterFactoryImpl();
-    List<Type> types = getParameterizedTypes(field);
-    ParameterizedType type = (ParameterizedType) types.get(0);
-    List<Type> actualTypeArguments = List.of(type.getActualTypeArguments());
-    Class<?> parameterizedClass = getParameterizedClass(field);
-    Pattern pattern = Pattern.compile("\\{(?:[^{}]|\\{(?:[^{}]|\\{[^{}]*\\})*\\})*\\}");
-    Matcher matcher = pattern.matcher(value);
-    List list = new ArrayList<>();
-    while (matcher.find()) {
-      String element = matcher.group();
-      BaseTypeAdapter typeAdapter = typeAdapterFactory.getTypeAdapter(element, parameterizedClass);
-      list.add(typeAdapter.mapStringJsonToObject(element, parameterizedClass));
-    }
-    return (T) list;
-  }
-
   private Class<?> getParameterizedClass(Field field) {
     String className = getParameterizedClassName(field);
     try {

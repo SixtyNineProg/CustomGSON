@@ -32,10 +32,6 @@ public class StringTypeAdapter implements BaseTypeAdapter {
     return (T) (Objects.isNull(extractedValue) ? value : extractedValue);
   }
 
-  @Override
-  public <T> T mapStringJsonToObject(String value, Field field) {
-    return null;
-  }
 
   @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {

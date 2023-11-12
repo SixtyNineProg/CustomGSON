@@ -23,11 +23,6 @@ public class OrderTestData {
 
   public Order buildOrder() {
     return Order.builder()
-        .productss(
-            List.of(
-                Collections.singletonList(ProductTestData.builder().build().buildProducts()),
-                Collections.singletonList(ProductTestData.builder().build().buildProducts()),
-                Collections.singletonList(ProductTestData.builder().build().buildProducts())))
         .id(id)
         .products(ProductTestData.builder().build().buildProducts())
         .createDate(createDate)

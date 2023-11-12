@@ -35,11 +35,6 @@ public class UuidTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String value, Field field) {
-    return null;
-  }
-
-  @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     return new StringBuilder(DOUBLE_QUOTE + object.toString() + DOUBLE_QUOTE);
   }

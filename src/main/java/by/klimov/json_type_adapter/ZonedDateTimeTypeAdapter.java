@@ -43,11 +43,6 @@ public class ZonedDateTimeTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String value, Field field) {
-    return null;
-  }
-
-  @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     DateTimeFormatter formatters = DateTimeFormatter.ofPattern(ZONED_DATE_TIME_FORMAT);
     ZonedDateTime zonedDateTime = (ZonedDateTime) object;

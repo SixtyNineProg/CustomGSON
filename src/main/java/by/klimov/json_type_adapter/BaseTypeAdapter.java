@@ -14,7 +14,5 @@ public interface BaseTypeAdapter {
 
   <T> T mapStringJsonToObject(String value, Class<T> tClass);
 
-  <T> T mapStringJsonToObject(String value, Field field);
-
   <T> StringBuilder mapObjectToStringJson(T object);
 }

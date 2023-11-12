@@ -43,11 +43,6 @@ public class LocalDateTypeAdapter implements BaseTypeAdapter {
   }
 
   @Override
-  public <T> T mapStringJsonToObject(String value, Field field) {
-    return null;
-  }
-
-  @Override
   public <T> StringBuilder mapObjectToStringJson(T object) {
     DateTimeFormatter formatters = DateTimeFormatter.ofPattern(LOCAL_DATE_FORMAT);
     LocalDate localDate = (LocalDate) object;
